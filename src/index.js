@@ -130,8 +130,8 @@ class Layout extends React.Component {
 		return (
 			<div className="content-container">
 				<div className="header">
-					<span className="title">@marciorasf</span>
-					<span className="subtitle">tic tac toe</span>
+					<span className="title">tic tac toe</span>
+					<span className="subtitle">@marciorasf</span>
 				</div>
 				<Game />
 			</div>
