@@ -1,8 +1,17 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:300,400,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Pacifico&display=swap");
+
+$boardSize: 200px;
+$boardBackground: rgba(black, 0.85);
+$btnColor: #e97400;
+
 body {
 	display: grid;
 	place-items: center;
-	background-color: antiquewhite;
+	background-color: lightblue;
 	height: 100vh;
+	font-family: "Nunito", sans-serif;
+	font-weight: 700;
 }
 
 .content-container {
@@ -13,51 +22,143 @@ body {
 }
 
 .header {
-	font-size: 20px;
-	margin-bottom: 20px;
-	background-color: lightblue;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 4em;
+	font-family: "Pacifico", sans-serif;
+
+	.title {
+		font-size: 44px;
+	}
+
+	.subtitle {
+		font-size: 32px;
+	}
 }
 
 .game-container {
 	display: flex;
 	flex-direction: column;
-	background-color: pink;
+	align-items: center;
 }
 
 .player-input {
+	display: flex;
+	justify-content: space-between;
 	input {
+		width: calc(100% - 26px);
+		padding-left: 0.25em;
+		font-size: 18px;
 	}
 
 	label {
-		margin-right: 20px;
+		width: 24px;
+		font-size: 22px;
+	}
+
+	+ .player-input {
+		margin-top: 0.5em;
+	}
+}
+
+@keyframes btnToRight {
+	0% {
+		transform: rotate(0.5turn) translateX(100%);
+	}
+	100% {
+		transform: rotate(0.5turn) translateX(0);
+	}
+}
+
+@keyframes btnToLeft {
+	0% {
+		transform: translateX(100%);
+	}
+	100% {
+		transform: translateX(0);
 	}
 }
 
 .btn {
+	overflow: hidden;
+	position: relative;
+	padding: 0.25em 0.75em;
+	font-size: 20px;
+	align-self: center;
+	margin-top: 10px;
+	color: white;
+	background-color: $btnColor;
+	border-radius: 3px;
+	transition: color linear 100ms;
+
+	&::after {
+		content: "";
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 100%;
+		position: absolute;
+	}
+
+	&:hover {
+		color: transparent;
+
+		&::after {
+			background-image: url("../images/left-arrow.svg");
+			background-repeat: no-repeat;
+			background-size: contain;
+			background-position: center;
+			transform: rotate(0.5turn);
+
+			animation-name: btnToRight;
+			animation-timing-function: linear;
+			animation-duration: 250ms;
+			animation-iteration-count: 1;
+			animation-fill-mode: forwards;
+		}
+	}
 }
 
-.btn--reset,
 .btn--play {
-	align-self: center;
+	&:hover::after {
+		animation-duration: 200ms;
+	}
+}
+
+.btn--change-players {
+	&:hover::after {
+		animation-name: btnToLeft;
+		animation-duration: 300ms;
+	}
+}
+
+.status {
+	font-size: 20px;
 }
 
 .board {
 	display: grid;
 	grid-template-rows: repeat(3, 1fr);
 	grid-template-columns: repeat(3, 1fr);
+	gap: 0.25em;
 
-	width: 100px;
-	height: 100px;
+	width: $boardSize;
+	height: $boardSize;
+	border-radius: 4px;
+	overflow: hidden;
 
-	$borderStyle: 1px solid blue;
-
-	button:nth-child(3n-1) {
-		border-right: $borderStyle;
-		border-left: $borderStyle;
+	button {
+		background-color: $boardBackground;
+		font-size: 36px;
+		color: white;
 	}
 
-	button:nth-child(n + 4):nth-child(-n + 6) {
-		border-top: $borderStyle;
-		border-bottom: $borderStyle;
+	&.is-active button {
+		cursor: default;
+	}
+
+	&.is-inactive button {
+		cursor: pointer;
 	}
 }

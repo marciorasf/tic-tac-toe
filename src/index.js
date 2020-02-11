@@ -14,6 +14,8 @@ function PlayerInput(props) {
 	);
 }
 
+const squaresDefault = () => Array(9).fill(undefined);
+
 class Board extends React.Component {
 	createSquares(squares, onClick) {
 		let htmlSquares = [];
@@ -28,7 +30,8 @@ class Board extends React.Component {
 	}
 
 	render() {
-		return <div className="board">{this.createSquares(this.props.squares, this.props.onClick)}</div>;
+		let className = "board " + (this.props.isEnded ? "is-inactive" : "is-active");
+		return <div className={className}>{this.createSquares(this.props.squares, this.props.onClick)}</div>;
 	}
 }
 
@@ -41,9 +44,10 @@ class Game extends React.Component {
 				X: { name: "Player 1" },
 				O: { name: "Player 2" }
 			},
-			isPlaying: false,
-			squares: Array(9).fill(undefined),
-			xIsNext: true
+			isPlaying: true,
+			squares: squaresDefault(),
+			xIsNext: true,
+			isEnded: false
 		};
 	}
 
@@ -57,25 +61,32 @@ class Game extends React.Component {
 
 		this.setState({
 			players: players,
+			squares: squaresDefault(),
 			isPlaying: true
 		});
 	}
 
 	handleSquareClick(index) {
 		const squares = this.state.squares;
-		if (calculateWinner(squares) || squares[index]) return;
+		if (this.state.isEnded) {
+			this.resetGame();
+			return;
+		}
+		if (squares[index]) return;
 
 		squares[index] = this.state.xIsNext ? "X" : "O";
 		this.setState({
 			squares: squares,
-			xIsNext: !this.state.xIsNext
+			xIsNext: !this.state.xIsNext,
+			isEnded: calculateWinner(squares) ? true : false
 		});
 	}
 
 	resetGame() {
 		this.setState({
-			squares: Array(9).fill(undefined),
-			xIsNext: true
+			squares: squaresDefault(),
+			xIsNext: true,
+			isEnded: false
 		});
 	}
 
@@ -96,16 +107,13 @@ class Game extends React.Component {
 		const winner = calculateWinner(this.state.squares);
 
 		if (winner) status = winner === "T" ? `TIE` : `${this.state.players[winner].name} Won`;
-		else status = (this.state.xIsNext ? this.state.players["X"].name : this.state.players["O"].name) + " turn";
+		else status = "Turn: " + (this.state.xIsNext ? this.state.players["X"].name : this.state.players["O"].name);
 
 		return (
 			<div className="game-container">
 				<span className="status">{status}</span>
-				<Board squares={this.state.squares} onClick={i => this.handleSquareClick(i)} />
-				<button className="btn btn--reset" onClick={() => this.resetGame()}>
-					Reset
-				</button>
-				<button className="btn btn--change-players" onClick={() => this.setState({ isPlaying: false })}>
+				<Board squares={this.state.squares} isEnded={this.state.isEnded} onClick={i => this.handleSquareClick(i)} />
+				<button className="btn btn--change-players" onClick={() => this.setState({ isPlaying: false, isEnded: false })}>
 					Change players
 				</button>
 			</div>
@@ -121,7 +129,10 @@ class Layout extends React.Component {
 	render() {
 		return (
 			<div className="content-container">
-				<div className="header">@marciorasf tic tac toe</div>
+				<div className="header">
+					<span className="title">@marciorasf</span>
+					<span className="subtitle">tic tac toe</span>
+				</div>
 				<Game />
 			</div>
 		);

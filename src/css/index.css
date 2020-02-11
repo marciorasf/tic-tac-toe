@@ -1,9 +1,13 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:300,400,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Pacifico&display=swap");
 body {
   display: -ms-grid;
   display: grid;
   place-items: center;
-  background-color: antiquewhite;
+  background-color: lightblue;
   height: 100vh;
+  font-family: "Nunito", sans-serif;
+  font-weight: 700;
 }
 
 .content-container {
@@ -21,9 +25,26 @@ body {
 }
 
 .header {
-  font-size: 20px;
-  margin-bottom: 20px;
-  background-color: lightblue;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 4em;
+  font-family: "Pacifico", sans-serif;
+}
+
+.header .title {
+  font-size: 44px;
+}
+
+.header .subtitle {
+  font-size: 32px;
 }
 
 .game-container {
@@ -34,18 +55,141 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  background-color: pink;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.player-input {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.player-input input {
+  width: calc(100% - 26px);
+  padding-left: 0.25em;
+  font-size: 18px;
 }
 
 .player-input label {
-  margin-right: 20px;
+  width: 24px;
+  font-size: 22px;
 }
 
-.btn--reset,
-.btn--play {
+.player-input + .player-input {
+  margin-top: 0.5em;
+}
+
+@-webkit-keyframes btnToRight {
+  0% {
+    -webkit-transform: rotate(0.5turn) translateX(100%);
+            transform: rotate(0.5turn) translateX(100%);
+  }
+  100% {
+    -webkit-transform: rotate(0.5turn) translateX(0);
+            transform: rotate(0.5turn) translateX(0);
+  }
+}
+
+@keyframes btnToRight {
+  0% {
+    -webkit-transform: rotate(0.5turn) translateX(100%);
+            transform: rotate(0.5turn) translateX(100%);
+  }
+  100% {
+    -webkit-transform: rotate(0.5turn) translateX(0);
+            transform: rotate(0.5turn) translateX(0);
+  }
+}
+
+@-webkit-keyframes btnToLeft {
+  0% {
+    -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+  }
+  100% {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+}
+
+@keyframes btnToLeft {
+  0% {
+    -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+  }
+  100% {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+}
+
+.btn {
+  overflow: hidden;
+  position: relative;
+  padding: 0.25em 0.75em;
+  font-size: 20px;
   -ms-flex-item-align: center;
       -ms-grid-row-align: center;
       align-self: center;
+  margin-top: 10px;
+  color: white;
+  background-color: #e97400;
+  border-radius: 3px;
+  -webkit-transition: color linear 100ms;
+  transition: color linear 100ms;
+}
+
+.btn::after {
+  content: "";
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.btn:hover {
+  color: transparent;
+}
+
+.btn:hover::after {
+  background-image: url("../images/left-arrow.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  -webkit-transform: rotate(0.5turn);
+          transform: rotate(0.5turn);
+  -webkit-animation-name: btnToRight;
+          animation-name: btnToRight;
+  -webkit-animation-timing-function: linear;
+          animation-timing-function: linear;
+  -webkit-animation-duration: 250ms;
+          animation-duration: 250ms;
+  -webkit-animation-iteration-count: 1;
+          animation-iteration-count: 1;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+.btn--play:hover::after {
+  -webkit-animation-duration: 200ms;
+          animation-duration: 200ms;
+}
+
+.btn--change-players:hover::after {
+  -webkit-animation-name: btnToLeft;
+          animation-name: btnToLeft;
+  -webkit-animation-duration: 300ms;
+          animation-duration: 300ms;
+}
+
+.status {
+  font-size: 20px;
 }
 
 .board {
@@ -55,16 +199,23 @@ body {
       grid-template-rows: repeat(3, 1fr);
   -ms-grid-columns: (1fr)[3];
       grid-template-columns: repeat(3, 1fr);
-  width: 100px;
-  height: 100px;
+  gap: 0.25em;
+  width: 200px;
+  height: 200px;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
-.board button:nth-child(3n-1) {
-  border-right: 1px solid blue;
-  border-left: 1px solid blue;
+.board button {
+  background-color: rgba(0, 0, 0, 0.85);
+  font-size: 36px;
+  color: white;
 }
 
-.board button:nth-child(n + 4):nth-child(-n + 6) {
-  border-top: 1px solid blue;
-  border-bottom: 1px solid blue;
+.board.is-active button {
+  cursor: default;
+}
+
+.board.is-inactive button {
+  cursor: pointer;
 }
