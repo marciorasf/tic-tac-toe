@@ -33,7 +33,7 @@ body {
 	}
 
 	.subtitle {
-		font-size: 36px;
+		font-size: 32px;
 	}
 }
 
@@ -148,6 +148,7 @@ body {
 	border-radius: 4px;
 	overflow: hidden;
 
+	span,
 	button {
 		background-color: $boardBackground;
 		font-size: 36px;

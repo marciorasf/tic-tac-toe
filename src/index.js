@@ -1,6 +1,7 @@
 import React from "react";
-
 import ReactDOM from "react-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/index.css";
 import "./css/reset.css";
 
@@ -8,11 +9,16 @@ function PlayerInput(props) {
 	const inputId = `inputPlayer${props.playerId}`;
 	return (
 		<div className="player-input">
-			<label htmlFor={inputId}>{props.playerId}:</label>
+			<label htmlFor={inputId}>{icons[props.playerId]}:</label>
 			<input id={inputId} name={inputId} type="text" defaultValue={props.playerName} />
 		</div>
 	);
 }
+
+const icons = {
+	X: <FontAwesomeIcon icon={faTimes} />,
+	O: "O"
+};
 
 const squaresDefault = () => Array(9).fill(undefined);
 
@@ -22,7 +28,7 @@ class Board extends React.Component {
 		for (let i = 0; i < 9; i++) {
 			htmlSquares.push(
 				<button key={i} className="square" onClick={() => onClick(i)}>
-					{squares[i]}
+					{icons[squares[i]]}
 				</button>
 			);
 		}
@@ -44,7 +50,7 @@ class Game extends React.Component {
 				X: { name: "Player 1" },
 				O: { name: "Player 2" }
 			},
-			isPlaying: true,
+			isPlaying: false,
 			squares: squaresDefault(),
 			xIsNext: true,
 			isEnded: false
@@ -62,7 +68,8 @@ class Game extends React.Component {
 		this.setState({
 			players: players,
 			squares: squaresDefault(),
-			isPlaying: true
+			isPlaying: true,
+			xIsNext: true
 		});
 	}
 
@@ -106,7 +113,7 @@ class Game extends React.Component {
 		let status;
 		const winner = calculateWinner(this.state.squares);
 
-		if (winner) status = winner === "T" ? `TIE` : `${this.state.players[winner].name} Won`;
+		if (winner) status = winner === "T" ? `Tie` : `${this.state.players[winner].name} Won`;
 		else status = "Turn: " + (this.state.xIsNext ? this.state.players["X"].name : this.state.players["O"].name);
 
 		return (
