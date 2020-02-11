@@ -1,0 +1,70 @@
+body {
+  display: -ms-grid;
+  display: grid;
+  place-items: center;
+  background-color: antiquewhite;
+  height: 100vh;
+}
+
+.content-container {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.header {
+  font-size: 20px;
+  margin-bottom: 20px;
+  background-color: lightblue;
+}
+
+.game-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: pink;
+}
+
+.player-input label {
+  margin-right: 20px;
+}
+
+.btn--reset,
+.btn--play {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+.board {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: (1fr)[3];
+      grid-template-rows: repeat(3, 1fr);
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+  width: 100px;
+  height: 100px;
+}
+
+.board button:nth-child(3n-1) {
+  border-right: 1px solid blue;
+  border-left: 1px solid blue;
+}
+
+.board button:nth-child(n + 4):nth-child(-n + 6) {
+  border-top: 1px solid blue;
+  border-bottom: 1px solid blue;
+}
