@@ -37,20 +37,69 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
+  // modes: "single", "multi"
+
   constructor(props) {
     super(props);
 
     this.state = {
+      mode: undefined,
+      botAlgorithm: null,
       players: {
         X: { name: "Player 1", wins: 0 },
         O: { name: "Player 2", wins: 0 },
       },
       squares: squaresDefault(),
       xIsNext: true,
-      isPlaying: false,
+      currentPage: "home",
       hasEnded: false,
       nGames: 0,
     };
+  }
+
+  restartGame() {
+    this.setState({
+      squares: squaresDefault(),
+      xIsNext: this.state.nGames % 2 === 0,
+      hasEnded: false,
+    });
+  }
+
+  resetGame() {
+    const players = this.state.players;
+    players["X"].wins = 0;
+    players["O"].wins = 0;
+    this.setState({
+      currentPage: "home",
+      players: players,
+    });
+
+    this.restartGame();
+  }
+
+  handleModeSelect(mode) {
+    const players = this.state.players;
+    players["O"].name = mode === "single" ? "Bot" : "Player 2";
+
+    this.setState({
+      botAlgorithm: calculateNextStep,
+      players: players,
+      mode: mode,
+      currentPage: "names",
+    });
+  }
+
+  renderHome() {
+    return (
+      <div className="mode-selection">
+        <button className="btn btn_depth" onClick={() => this.handleModeSelect("single")}>
+          1 player
+        </button>
+        <button className="btn btn_depth" onClick={() => this.handleModeSelect("multi")}>
+          2 players
+        </button>
+      </div>
+    );
   }
 
   handleNamesSubmit(event) {
@@ -64,9 +113,21 @@ class Game extends React.Component {
     this.setState({
       players: players,
       squares: squaresDefault(),
-      isPlaying: true,
+      currentPage: "playing",
       xIsNext: true,
     });
+  }
+
+  renderNamesPage() {
+    return (
+      <form className="game-container" onSubmit={(evt) => this.handleNamesSubmit(evt)}>
+        <PlayerInput playerId={"X"} playerName={this.state.players["X"].name} />
+        <PlayerInput playerId={"O"} playerName={this.state.players["O"].name} />
+        <button className="btn btn_play" type="submit">
+          Play
+        </button>
+      </form>
+    );
   }
 
   handleSquareClick(index) {
@@ -98,38 +159,6 @@ class Game extends React.Component {
     });
   }
 
-  restartGame() {
-    this.setState({
-      squares: squaresDefault(),
-      xIsNext: this.state.nGames % 2 === 0,
-      hasEnded: false,
-    });
-  }
-
-  resetGame() {
-    const players = this.state.players;
-    players["X"].wins = 0;
-    players["O"].wins = 0;
-    this.setState({
-      isPlaying: false,
-      players: players,
-    });
-
-    this.restartGame();
-  }
-
-  renderPreGame() {
-    return (
-      <form className="game-container" onSubmit={(evt) => this.handleNamesSubmit(evt)}>
-        <PlayerInput playerId={"X"} playerName={this.state.players["X"].name} />
-        <PlayerInput playerId={"O"} playerName={this.state.players["O"].name} />
-        <button className="btn btn_play" type="submit">
-          Play
-        </button>
-      </form>
-    );
-  }
-
   renderScoreBoard() {
     let xPlayerScoreClass = "player-score";
     let yPlayerScoreClass = "player-score";
@@ -155,25 +184,31 @@ class Game extends React.Component {
     const winner = calculateWinner(this.state.squares);
 
     if (winner) status = winner === "T" ? `Tie` : `${this.state.players[winner].name} Won`;
+    else if (!this.state.xIsNext && this.state.mode === "single")
+      setTimeout(() => {
+        this.handleSquareClick(this.state.botAlgorithm(this.state.squares));
+      }, 300);
 
     return (
       <div className="game-container">
         {this.renderScoreBoard()}
         <Board squares={this.state.squares} hasEnded={this.state.hasEnded} onClick={(i) => this.handleSquareClick(i)} message={status} />
         <button
-          className="btn btn_change-players"
+          className="btn btn_home"
           onClick={() => {
             this.resetGame();
           }}
         >
-          Change players
+          Home
         </button>
       </div>
     );
   }
 
   render() {
-    return this.state.isPlaying ? this.renderGame() : this.renderPreGame();
+    if (this.state.currentPage === "home") return this.renderHome();
+    if (this.state.currentPage === "names") return this.renderNamesPage();
+    if (this.state.currentPage === "playing") return this.renderGame();
   }
 }
 
@@ -225,4 +260,12 @@ function PlayerInput(props) {
       <input id={inputId} name={inputId} type="text" defaultValue={props.playerName} />
     </div>
   );
+}
+
+function calculateNextStep(squares) {
+  let freeSquares = squares.map((value, index) => (!value ? index : false));
+  freeSquares = freeSquares.filter((value) => value !== false);
+
+  let randomSquare = Math.floor(Math.random() * freeSquares.length);
+  return freeSquares[randomSquare];
 }

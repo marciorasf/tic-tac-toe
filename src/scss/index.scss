@@ -44,6 +44,12 @@ body {
   }
 }
 
+.mode-selection {
+  .btn {
+    margin: 0.5em;
+  }
+}
+
 .game-container {
   display: flex;
   align-items: center;
@@ -102,45 +108,58 @@ body {
   color: white;
   letter-spacing: 0.025em;
   font-size: 20px;
-  transition: color linear 100ms;
 
-  &::after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    content: "";
-  }
-
-  &:hover {
-    color: transparent;
+  &.btn_play,
+  &.btn_home {
+    transition: color linear 100ms;
 
     &::after {
-      background-image: url("../images/left-arrow.svg");
-      background-position: center;
-      background-size: contain;
-      background-repeat: no-repeat;
-      transform: rotate(0.5turn);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      content: "";
+    }
 
-      animation-name: btnToRight;
-      animation-duration: 250ms;
-      animation-timing-function: linear;
-      animation-iteration-count: 1;
-      animation-fill-mode: forwards;
+    &:hover {
+      color: transparent;
+
+      &::after {
+        background-image: url("../images/left-arrow.svg");
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        transform: rotate(0.5turn);
+
+        animation-name: btnToRight;
+        animation-duration: 250ms;
+        animation-timing-function: linear;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+      }
     }
   }
 
-  &_play {
+  &.btn_play {
     &:hover::after {
       animation-duration: 200ms;
     }
   }
 
-  &_change-players {
+  &.btn_home {
     &:hover::after {
       animation-name: btnToLeft;
       animation-duration: 300ms;
+    }
+  }
+
+  &.btn_depth {
+    transition: transform linear 100ms;
+
+    &:hover {
+      box-shadow: 0 2px 4px 1px rgba(black, 0.15);
+      transform: translateY(-4px);
     }
   }
 }
