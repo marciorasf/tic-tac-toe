@@ -5,16 +5,6 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/index.min.css";
 import "./css/reset.min.css";
 
-function PlayerInput(props) {
-  const inputId = `inputPlayer${props.playerId}`;
-  return (
-    <div className="player-input">
-      <label htmlFor={inputId}>{icons[props.playerId]}:</label>
-      <input id={inputId} name={inputId} type="text" defaultValue={props.playerName} />
-    </div>
-  );
-}
-
 const icons = {
   X: <FontAwesomeIcon icon={faTimes} />,
   O: "O",
@@ -55,10 +45,11 @@ class Game extends React.Component {
         X: { name: "Player 1", wins: 0 },
         O: { name: "Player 2", wins: 0 },
       },
-      isPlaying: false,
       squares: squaresDefault(),
       xIsNext: true,
+      isPlaying: false,
       hasEnded: false,
+      nGames: 0,
     };
   }
 
@@ -81,6 +72,9 @@ class Game extends React.Component {
   handleSquareClick(index) {
     const squares = this.state.squares;
     if (this.state.hasEnded) {
+      this.setState({
+        nGames: this.state.nGames + 1,
+      });
       this.restartGame();
       return;
     }
@@ -107,9 +101,21 @@ class Game extends React.Component {
   restartGame() {
     this.setState({
       squares: squaresDefault(),
-      xIsNext: (this.state.players["X"].wins + this.state.players["O"].wins) % 2 === 0,
+      xIsNext: this.state.nGames % 2 === 0,
       hasEnded: false,
     });
+  }
+
+  resetGame() {
+    const players = this.state.players;
+    players["X"].wins = 0;
+    players["O"].wins = 0;
+    this.setState({
+      isPlaying: false,
+      players: players,
+    });
+
+    this.restartGame();
   }
 
   renderPreGame() {
@@ -157,8 +163,7 @@ class Game extends React.Component {
         <button
           className="btn btn_change-players"
           onClick={() => {
-            this.restartGame();
-            this.setState({ isPlaying: false });
+            this.resetGame();
           }}
         >
           Change players
@@ -210,4 +215,14 @@ function calculateWinner(squares) {
   if (checkedSquares.length === 0) return "T";
 
   return null;
+}
+
+function PlayerInput(props) {
+  const inputId = `inputPlayer${props.playerId}`;
+  return (
+    <div className="player-input">
+      <label htmlFor={inputId}>{icons[props.playerId]}:</label>
+      <input id={inputId} name={inputId} type="text" defaultValue={props.playerName} />
+    </div>
+  );
 }
