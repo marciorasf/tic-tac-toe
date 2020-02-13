@@ -10,7 +10,28 @@ const icons = {
   O: "O",
 };
 
-const squaresDefault = () => Array(9).fill(undefined);
+const winPossibilites = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+];
+
+const squaresDefault = Array(9).fill(undefined);
+
+function PlayerInput(props) {
+  const inputId = `inputPlayer${props.playerId}`;
+  return (
+    <div className="player-input">
+      <label htmlFor={inputId}>{icons[props.playerId]}:</label>
+      <input id={inputId} name={inputId} type="text" defaultValue={props.playerName} />
+    </div>
+  );
+}
 
 class Board extends React.Component {
   createSquares(squares, onClick) {
@@ -49,7 +70,7 @@ class Game extends React.Component {
         X: { name: "Player 1", wins: 0 },
         O: { name: "Player 2", wins: 0 },
       },
-      squares: squaresDefault(),
+      squares: squaresDefault.slice(),
       xIsNext: true,
       currentPage: "home",
       hasEnded: false,
@@ -59,14 +80,14 @@ class Game extends React.Component {
 
   restartGame() {
     this.setState({
-      squares: squaresDefault(),
+      squares: squaresDefault.slice(),
       xIsNext: this.state.nGames % 2 === 0,
       hasEnded: false,
     });
   }
 
   resetGame() {
-    const players = this.state.players;
+    const players = jsonClone(this.state.players);
     players["X"].wins = 0;
     players["O"].wins = 0;
     this.setState({
@@ -78,11 +99,11 @@ class Game extends React.Component {
   }
 
   handleModeSelect(mode) {
-    const players = this.state.players;
+    const players = jsonClone(this.state.players);
     players["O"].name = mode === "single" ? "Bot" : "Player 2";
 
     this.setState({
-      botAlgorithm: calculateNextStep,
+      botAlgorithm: botMediumAlgorithm,
       players: players,
       mode: mode,
       currentPage: "names",
@@ -106,13 +127,13 @@ class Game extends React.Component {
     event.persist();
     event.preventDefault();
 
-    const players = this.state.players;
+    const players = jsonClone(this.state.players);
     players["X"].name = event.target.elements["inputPlayerX"].value;
     players["O"].name = event.target.elements["inputPlayerO"].value;
 
     this.setState({
       players: players,
-      squares: squaresDefault(),
+      squares: squaresDefault.slice(),
       currentPage: "playing",
       xIsNext: true,
     });
@@ -131,7 +152,7 @@ class Game extends React.Component {
   }
 
   handleSquareClick(index) {
-    const squares = this.state.squares;
+    const squares = this.state.squares.slice();
     if (this.state.hasEnded) {
       this.setState({
         nGames: this.state.nGames + 1,
@@ -145,7 +166,7 @@ class Game extends React.Component {
 
     let winner = calculateWinner(squares);
     if (winner === "X" || winner === "O") {
-      const players = this.state.players;
+      const players = jsonClone(this.state.players);
       players[winner].wins += 1;
       this.setState({
         players: players,
@@ -181,7 +202,7 @@ class Game extends React.Component {
 
   renderGame() {
     let status = "";
-    const winner = calculateWinner(this.state.squares);
+    const winner = calculateWinner(this.state.squares.slice());
 
     if (winner) status = winner === "T" ? `Tie` : `${this.state.players[winner].name} Won`;
     else if (!this.state.xIsNext && this.state.mode === "single")
@@ -229,16 +250,7 @@ class Layout extends React.Component {
 ReactDOM.render(<Layout />, document.getElementById("root"));
 
 function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
+  const lines = winPossibilites;
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
@@ -252,20 +264,46 @@ function calculateWinner(squares) {
   return null;
 }
 
-function PlayerInput(props) {
-  const inputId = `inputPlayer${props.playerId}`;
-  return (
-    <div className="player-input">
-      <label htmlFor={inputId}>{icons[props.playerId]}:</label>
-      <input id={inputId} name={inputId} type="text" defaultValue={props.playerName} />
-    </div>
-  );
+function botEasyAlgorithm(squares) {
+  let freeSquares = getFreeSquares(squares);
+  return freeSquares[randomInt(0, freeSquares.length)];
 }
 
-function calculateNextStep(squares) {
-  let freeSquares = squares.map((value, index) => (!value ? index : false));
-  freeSquares = freeSquares.filter((value) => value !== false);
+function botMediumAlgorithm(squares) {
+  let freeSquares = getFreeSquares(squares);
 
-  let randomSquare = Math.floor(Math.random() * freeSquares.length);
-  return freeSquares[randomSquare];
+  let steps = [];
+  for (let square of freeSquares) {
+    let squaresCopy = squares.slice();
+    squaresCopy[square] = "O";
+    steps.push([square, ...getXWinPossibilites(squaresCopy)]);
+  }
+  steps.sort((arrA, arrB) => arrA.length - arrB.length);
+
+  const minLength = steps[0].length;
+  steps = steps.filter((arr) => arr.length === minLength);
+
+  return steps[randomInt(0, steps.length)][0];
+}
+
+function botHardAlgorithm() {}
+
+function getFreeSquares(squares) {
+  let freeSquares = squares.map((value, index) => (!value ? index : false));
+  return freeSquares.filter((value) => value !== false);
+}
+
+function getXWinPossibilites(squares) {
+  let xWins = winPossibilites;
+  xWins = xWins.map((line) => line.map((index) => squares[index]));
+  xWins = xWins.filter((line) => !line.includes("O"));
+  return xWins;
+}
+
+function jsonClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function randomInt(min = 0, max = 1) {
+  return Math.floor(Math.random() * (max - min)) + min;
 }
