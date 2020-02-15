@@ -23,16 +23,6 @@ const winPossibilites = [
 
 const squaresDefault = Array(9).fill(undefined);
 
-function PlayerInput(props) {
-  const inputId = `inputPlayer${props.playerId}`;
-  return (
-    <div className="player-input">
-      <label htmlFor={inputId}>{icons[props.playerId]}:</label>
-      <input id={inputId} name={inputId} type="text" defaultValue={props.playerName} />
-    </div>
-  );
-}
-
 class Board extends React.Component {
   createSquares(squares, onClick) {
     let htmlSquares = [];
@@ -65,10 +55,10 @@ class Game extends React.Component {
 
     this.state = {
       mode: undefined,
-      botAlgorithm: null,
+      botAlgorithm: undefined,
       players: {
         X: { name: "Player 1", wins: 0 },
-        O: { name: "Player 2", wins: 0 },
+        O: { name: "Bot", wins: 0 },
       },
       squares: squaresDefault.slice(),
       xIsNext: true,
@@ -103,7 +93,7 @@ class Game extends React.Component {
     players["O"].name = mode === "single" ? "Bot" : "Player 2";
 
     this.setState({
-      botAlgorithm: botMediumAlgorithm,
+      botAlgorithm: botBestAlgorithm,
       players: players,
       mode: mode,
       currentPage: "names",
@@ -131,23 +121,58 @@ class Game extends React.Component {
     players["X"].name = event.target.elements["inputPlayerX"].value;
     players["O"].name = event.target.elements["inputPlayerO"].value;
 
+    let botAlgorithm = undefined;
+    if (this.state.mode === "single") {
+      const difficulty = event.target.elements["difficultySelect"].value;
+      if (difficulty === "easy") botAlgorithm = botEasyAlgorithm;
+      else if (difficulty === "medium") botAlgorithm = botMediumAlgorithm;
+      else if (difficulty === "impossible") botAlgorithm = botBestAlgorithm;
+    }
+
     this.setState({
       players: players,
       squares: squaresDefault.slice(),
+      botAlgorithm: botAlgorithm,
       currentPage: "playing",
       xIsNext: true,
     });
   }
 
-  renderNamesPage() {
+  renderInputNames() {
+    const select =
+      this.state.mode === "single" ? (
+        <select name="difficultySelect" className="select" defaultValue="easy">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="impossible">Impossible</option>
+        </select>
+      ) : null;
+
     return (
-      <form className="game-container" onSubmit={(evt) => this.handleNamesSubmit(evt)}>
-        <PlayerInput playerId={"X"} playerName={this.state.players["X"].name} />
-        <PlayerInput playerId={"O"} playerName={this.state.players["O"].name} />
-        <button className="btn btn_play" type="submit">
-          Play
-        </button>
-      </form>
+      <div className="game-container">
+        <form className="names-form" onSubmit={(evt) => this.handleNamesSubmit(evt)}>
+          <label htmlFor="inputPlayerX">{icons["X"]}:</label>
+          <input id="inputPlayerX" name="inputPlayerX" type="text" defaultValue={this.state.players["X"].name} />
+
+          <label htmlFor="inputPlayerO">{icons["O"]}:</label>
+          <input id="inputPlayerO" name="inputPlayerO" type="text" defaultValue={this.state.players["O"].name} />
+          {select}
+          <div className="btn-row">
+            <button className="btn btn_play" type="submit">
+              Play
+            </button>
+            <button
+              className="btn btn_home"
+              onClick={() => {
+                this.resetGame();
+              }}
+              type="click"
+            >
+              Home
+            </button>
+          </div>
+        </form>
+      </div>
     );
   }
 
@@ -228,7 +253,7 @@ class Game extends React.Component {
 
   render() {
     if (this.state.currentPage === "home") return this.renderHome();
-    if (this.state.currentPage === "names") return this.renderNamesPage();
+    if (this.state.currentPage === "names") return this.renderInputNames();
     if (this.state.currentPage === "playing") return this.renderGame();
   }
 }
@@ -270,23 +295,48 @@ function botEasyAlgorithm(squares) {
 }
 
 function botMediumAlgorithm(squares) {
+  const winnerMove = getOWinPlay(squares);
+  if (winnerMove !== false) return winnerMove;
+
   let freeSquares = getFreeSquares(squares);
-
-  let steps = [];
-  for (let square of freeSquares) {
-    let squaresCopy = squares.slice();
-    squaresCopy[square] = "O";
-    steps.push([square, ...getXWinPossibilites(squaresCopy)]);
-  }
-  steps.sort((arrA, arrB) => arrA.length - arrB.length);
-
+  let steps = getNextStepPossibilites(squares, freeSquares);
   const minLength = steps[0].length;
   steps = steps.filter((arr) => arr.length === minLength);
-
   return steps[randomInt(0, steps.length)][0];
 }
 
-function botHardAlgorithm() {}
+function botBestAlgorithm(squares) {
+  const winnerMove = getOWinPlay(squares);
+  if (winnerMove !== false) return winnerMove;
+
+  let freeSquares = getFreeSquares(squares);
+  let steps = getNextStepPossibilites(squares, freeSquares);
+
+  let xNeedPlays = [];
+  for (let step of steps) {
+    let stepResult = {
+      square: step[0],
+      1: 0,
+      2: 0,
+      3: 0,
+    };
+    step = step.slice(1);
+    for (let play of step) {
+      let xPlays = play.filter((sqr) => sqr === undefined);
+      xPlays = xPlays.length;
+      stepResult[xPlays] += 1;
+    }
+    xNeedPlays.push(stepResult);
+  }
+
+  xNeedPlays.sort((objA, objB) => {
+    if (objA[1] !== objB[1]) return objA[1] - objB[1];
+    if (objA[2] !== objB[2]) return objA[2] - objB[2];
+    if (objA[3] !== objB[3]) return objA[3] - objB[3];
+  });
+
+  return xNeedPlays[0].square;
+}
 
 function getFreeSquares(squares) {
   let freeSquares = squares.map((value, index) => (!value ? index : false));
@@ -298,6 +348,30 @@ function getXWinPossibilites(squares) {
   xWins = xWins.map((line) => line.map((index) => squares[index]));
   xWins = xWins.filter((line) => !line.includes("O"));
   return xWins;
+}
+
+function getNextStepPossibilites(squares, freeSquares) {
+  let steps = [];
+  for (let square of freeSquares) {
+    let squaresCopy = squares.slice();
+    squaresCopy[square] = "O";
+    steps.push([square, ...getXWinPossibilites(squaresCopy)]);
+  }
+  steps.sort((arrA, arrB) => arrA.length - arrB.length);
+  return steps;
+}
+
+function getOWinPlay(squares) {
+  let oWins = winPossibilites;
+  oWins = oWins.map((line, index) => line.map((index) => squares[index]));
+  let oWinsJustO = oWins.map((line, index) => [index, ...line.filter((value) => value !== undefined && value !== "X")]);
+  oWinsJustO.sort((arrA, arrB) => arrB.length - arrA.length);
+  if (oWinsJustO[0].length === 3) {
+    const winnerLine = oWinsJustO[0][0];
+    const winnerSquare = oWins[winnerLine].findIndex((value) => value === undefined);
+    if (winnerSquare >= 0) return winPossibilites[winnerLine][winnerSquare];
+  }
+  return false;
 }
 
 function jsonClone(obj) {

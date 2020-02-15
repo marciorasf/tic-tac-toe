@@ -2,12 +2,13 @@
 @import url("https://fonts.googleapis.com/css?family=Pacifico&display=swap");
 
 $colors: (
-  base: #add8e6,
-  primary: #b38274,
+  base: #a0edff,
+  primary: #fe6b35,
 );
 
 $boardSize: 248px;
-$boardBackground: lightblue;
+$squaresColor: #c2f3ff;
+$linesColor: #00aad2;
 $symbolColor: #573c36;
 
 body {
@@ -56,25 +57,58 @@ body {
   flex-direction: column;
 }
 
-.player-input {
-  display: flex;
-  justify-content: space-between;
-
-  input {
-    padding-left: 0.5em;
-    width: calc(100% - 26px);
-    border-radius: 2px;
-    font-size: 18px;
-  }
+.names-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5em 0;
 
   label {
+    grid-column: 1 / 2;
+    margin-right: 0.5em;
     width: 24px;
     font-size: 22px;
   }
 
-  + .player-input {
-    margin-top: 0.5em;
+  input {
+    grid-column: 2 / 3;
+    padding-left: 0.5em;
+    border-radius: 2px;
+    font-size: 18px;
   }
+
+  .select {
+    grid-column: 2 / 3;
+  }
+
+  .btn-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto 1fr;
+    grid-column: 1 / 3;
+    margin-top: 0.5em;
+    gap: 0.5em;
+
+    .btn:first-child {
+      grid-column: 2 / 3;
+    }
+
+    .btn:last-child {
+      grid-column: 3 / 4;
+    }
+  }
+}
+
+.select {
+  display: flex;
+  padding: 0.25em 0.75em 0.25em 0.5em;
+  width: 100%;
+  border-radius: 3px;
+  background-color: white;
+  background-image: url("../images/chevron-up-down.svg");
+  background-position: right 0.75em center;
+  background-size: 0.5em;
+  background-repeat: no-repeat;
+  font-size: 18px;
+  appearance: none;
 }
 
 @keyframes btnToRight {
@@ -101,7 +135,6 @@ body {
   position: relative;
   overflow: hidden;
   align-self: center;
-  margin-top: 10px;
   padding: 0.25em 0.75em;
   border-radius: 3px;
   background-color: map-get($colors, "primary");
@@ -174,15 +207,16 @@ body {
   overflow: hidden;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
+  margin-bottom: 2em;
   width: $boardSize;
   height: $boardSize;
   border-radius: 4px;
-  background-color: rgba(#2e7e98, 1);
+  background-color: $linesColor;
   gap: 4px;
 
   span,
   button {
-    background-color: $boardBackground;
+    background-color: $squaresColor;
     color: $symbolColor;
     font-size: 36px;
     cursor: default;
@@ -218,7 +252,7 @@ body {
 .score-board {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin-bottom: 10px;
+  margin-bottom: 2em;
   width: 100%;
 }
 
