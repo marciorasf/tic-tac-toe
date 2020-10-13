@@ -2,12 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import {faCircle} from "@fortawesome/free-regular-svg-icons"
 import "./css/index.min.css";
 import "./css/reset.min.css";
 
 const icons = {
   X: <FontAwesomeIcon icon={faTimes} />,
-  O: "O",
+  O: <FontAwesomeIcon icon={faCircle} />,
 };
 
 const winPossibilites = [
