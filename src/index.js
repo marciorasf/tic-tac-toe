@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import {faCircle} from "@fortawesome/free-regular-svg-icons"
-import "./css/index.min.css";
-import "./css/reset.min.css";
+import { faCircle } from "@fortawesome/free-regular-svg-icons"
+import "./styles/index.css";
+import "./styles/reset.css";
 
 const icons = {
   X: <FontAwesomeIcon icon={faTimes} />,
@@ -25,9 +25,12 @@ const winPossibilites = [
 const squaresDefault = Array(9).fill(undefined);
 
 class Board extends React.Component {
+
   createSquares(squares, onClick) {
+    const nSquares = 9;
+
     let htmlSquares = [];
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < nSquares; i++) {
       htmlSquares.push(
         <button key={i} className="square" onClick={() => onClick(i)}>
           {icons[squares[i]]}
