@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
 
 import {
   Button,
@@ -21,6 +22,8 @@ export default function Landing() {
   const globalState = useContext(store);
   const { dispatch } = globalState;
 
+  const history = useHistory();
+
   function handleInputChange(event) {
     const { name, value } = event.target;
 
@@ -30,9 +33,15 @@ export default function Landing() {
     });
   }
 
+  function startGame(event) {
+    event.preventDefault();
+
+    history.push("/game");
+  }
+
   return (
     <Container maxWidth="xs">
-      <form>
+      <form onSubmit={startGame}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             {/* Change variant to h1 after assign theme */}
@@ -103,7 +112,7 @@ export default function Landing() {
           </Grid>
 
           <Grid item xs={12}>
-            <Button fullWidth variant="contained">
+            <Button type="submit" fullWidth variant="contained">
               Start
             </Button>
           </Grid>

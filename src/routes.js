@@ -6,8 +6,8 @@ import { Game, Landing } from "./pages";
 function Routes() {
   return (
     <BrowserRouter>
-      <Route path="/" component={Landing} />
       <Route exact path="/game" component={Game} />
+      <Route exact path="/" component={Landing} />
     </BrowserRouter>
   );
 }
