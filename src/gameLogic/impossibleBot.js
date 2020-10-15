@@ -1,1 +1,1 @@
-export default function impossibleBotNextMove() {}
+export default function impossibleBotNextSquare() {}

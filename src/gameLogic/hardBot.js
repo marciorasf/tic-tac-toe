@@ -1,1 +1,1 @@
-export default function hardBotNextMove() {}
+export default function hardBotNextSquare() {}

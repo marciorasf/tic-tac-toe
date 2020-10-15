@@ -1,1 +1,1 @@
-export default function mediumBotNextMove() {}
+export default function mediumBotNextSquare() {}

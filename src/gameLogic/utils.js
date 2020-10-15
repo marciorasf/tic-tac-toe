@@ -12,7 +12,17 @@ export const winnerPlays = [
   [2, 4, 6],
 ];
 
-export function getFreeSquares(squares) {}
+export function getFreeSquares(squares) {
+  const freeSquares = [];
+
+  squares.forEach((square, index) => {
+    if (!square) {
+      freeSquares.push(index);
+    }
+  });
+
+  return freeSquares;
+}
 
 export function getNextWinnerPlayIfExists(squares, playerSymbol) {}
 
@@ -28,4 +38,8 @@ export function calculateWinner(squares) {
   }
 
   return null;
+}
+
+export function randomInt(max) {
+  return Math.floor(Math.random() * max);
 }

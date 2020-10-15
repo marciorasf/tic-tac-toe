@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
-import { Box, Container, Grid } from "@material-ui/core";
+import { Box, Container, Grid, ButtonBase } from "@material-ui/core";
 
+import { easyBotNextSquare } from "../../gameLogic";
 import { calculateWinner } from "../../gameLogic/utils";
 import { store } from "../../store";
 import useStyles from "./styles";
@@ -13,45 +14,70 @@ const playerSymbols = {
   player2: "0",
 };
 
+const initialSquares = Array(nSquares).fill(undefined);
+
 export default function Game() {
   const globalState = useContext(store);
-  const { dispatch } = globalState;
 
-  const [squares, setSquares] = useState(Array(nSquares).fill(undefined));
+  const [squares, setSquares] = useState(initialSquares);
   const [isPlayer1Turn, setIsPlayer1Turn] = useState(true);
   const [winCounter, setWinCounter] = useState({ player1: 0, player2: 0 });
 
   const classes = useStyles();
 
+  function restartGame() {
+    setSquares(initialSquares);
+  }
 
   function handleClickSquare(squareIndex) {
     const currentSquares = squares.slice();
     currentSquares[squareIndex] = isPlayer1Turn ? "player1" : "player2";
     setSquares(currentSquares);
 
-    const winner = calculateWinner(currentSquares);
-
-    if (winner) {
-      setWinCounter({
-        ...winCounter,
-        [winner]: winCounter[winner] + 1,
-      });
-    }
-
     setIsPlayer1Turn(!isPlayer1Turn);
+  }
+
+  function triggerBotPlay() {
+    const nextSquare = easyBotNextSquare(squares);
+    handleClickSquare(nextSquare);
   }
 
   function Squares() {
     return squares.map((square, index) => (
-      <Box
+      <ButtonBase
         key={index}
         className={classes.cell}
         onClick={() => handleClickSquare(index)}
+        disabled={square}
       >
         {playerSymbols[square]}
-      </Box>
+      </ButtonBase>
     ));
   }
+
+  function incrementWinCounter(winner) {
+    setWinCounter({
+      ...winCounter,
+      [winner]: winCounter[winner] + 1,
+    });
+  }
+
+  function isBotTurn() {
+    return !isPlayer1Turn && globalState.state.mode === "single";
+  }
+
+  useEffect(() => {
+    const winner = calculateWinner(squares);
+
+    if (winner) {
+      incrementWinCounter(winner);
+      restartGame();
+    }
+
+    if (isBotTurn()) {
+      triggerBotPlay();
+    }
+  }, [squares]);
 
   return (
     <Container maxWidth="xs" className={classes.container}>

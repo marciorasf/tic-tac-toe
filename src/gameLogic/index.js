@@ -1,4 +1,11 @@
-import easyBot from "./easyBot"
-import mediumBot from "./mediumBot"
-import hardBot from "./hardBot"
-import impossibleBot from "./impossibleBot"
+import easyBotNextSquare from "./easyBot";
+import hardBotNextSquare from "./hardBot";
+import impossibleBotNextSquare from "./impossibleBot";
+import mediumBotNextSquare from "./mediumBot";
+
+export {
+  easyBotNextSquare,
+  mediumBotNextSquare,
+  hardBotNextSquare,
+  impossibleBotNextSquare,
+};
