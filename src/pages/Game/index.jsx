@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 
-import { Box, Container, Grid, ButtonBase } from "@material-ui/core";
+import { Box, Container, Grid, ButtonBase, Button } from "@material-ui/core";
 
 import { easyBotNextSquare } from "../../gameLogic";
 import { calculateWinner } from "../../gameLogic/utils";
@@ -22,10 +22,12 @@ export default function Game() {
   const [squares, setSquares] = useState(initialSquares);
   const [isPlayer1Turn, setIsPlayer1Turn] = useState(true);
   const [winCounter, setWinCounter] = useState({ player1: 0, player2: 0 });
+  const [currentWinner, setCurrentWinner] = useState(null);
 
   const classes = useStyles();
 
   function restartGame() {
+    setCurrentWinner(null);
     setSquares(initialSquares);
   }
 
@@ -70,8 +72,8 @@ export default function Game() {
     const winner = calculateWinner(squares);
 
     if (winner) {
+      setCurrentWinner(winner);
       incrementWinCounter(winner);
-      restartGame();
     }
 
     if (isBotTurn()) {
@@ -86,10 +88,24 @@ export default function Game() {
           Player 1: {winCounter.player1}, Player 2: {winCounter.player2}
         </Grid>
         <Grid item xs={12}>
-          <Box container className={classes.table}>
-            {Squares()}
-          </Box>
+          {currentWinner ? (
+            <Grid
+              container
+              justify="center"
+              alignItems="center"
+              onClick={restartGame}
+            >
+              {currentWinner} won!
+              <br />
+              Click again to restart
+            </Grid>
+          ) : (
+            <Box container className={classes.table}>
+              {Squares()}
+            </Box>
+          )}
         </Grid>
+        <Button onClick={restartGame}>Restart</Button>
       </Grid>
     </Container>
   );
