@@ -24,6 +24,7 @@ export default function Game() {
   const [winCounter, setWinCounter] = useState({ player1: 0, player2: 0 });
   const [currentWinner, setCurrentWinner] = useState(null);
   const [hasTied, setHasTied] = useState(false);
+  const [areSquaresDisabled, setAreSquaresDisabled] = useState(false);
 
   const classes = useStyles();
 
@@ -43,6 +44,7 @@ export default function Game() {
   function triggerBotPlay() {
     const nextSquare = easyBotNextSquare(squares);
     handleClickSquare(nextSquare);
+    setAreSquaresDisabled(false);
   }
 
   function Squares() {
@@ -51,7 +53,7 @@ export default function Game() {
         key={index}
         className={classes.cell}
         onClick={() => handleClickSquare(index)}
-        disabled={square}
+        disabled={square || areSquaresDisabled}
       >
         {playerSymbols[square]}
       </ButtonBase>
@@ -80,6 +82,7 @@ export default function Game() {
     setHasTied(calculateTie(squares));
 
     if (isBotTurn()) {
+      setAreSquaresDisabled(true);
       triggerBotPlay();
     }
   }, [squares]);

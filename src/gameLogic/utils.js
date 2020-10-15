@@ -40,6 +40,12 @@ export function calculateWinner(squares) {
   return null;
 }
 
+export function calculateTie(squares) {
+  const freeSquares = getFreeSquares(squares);
+
+  return freeSquares.length === 0;
+}
+
 export function randomInt(max) {
   return Math.floor(Math.random() * max);
 }
