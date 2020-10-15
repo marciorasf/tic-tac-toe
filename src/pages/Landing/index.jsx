@@ -68,14 +68,17 @@ export default function Landing() {
                 <FormControlLabel
                   control={<Radio />}
                   label="2 players"
-                  value="mode"
+                  value="multi"
                 ></FormControlLabel>
               </RadioGroup>
             </FormControl>
           </Grid>
 
           <Grid item xs={12}>
-            <FormControl fullWidth>
+            <FormControl
+              fullWidth
+              disabled={globalState.state.mode !== "single"}
+            >
               <InputLabel id="botDifficult">Bot difficult</InputLabel>
               <Select
                 labelId="botDifficult"
