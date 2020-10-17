@@ -1,7 +1,18 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 
-import { Box, Container, Grid, ButtonBase } from "@material-ui/core";
+import {
+  Box,
+  Container,
+  Grid,
+  ButtonBase,
+  RadioGroup,
+  Radio,
+  FormControl,
+  FormControlLabel,
+  Select,
+  MenuItem,
+  InputLabel,
+} from "@material-ui/core";
 
 import { getBotNextSquare } from "../../gameLogic";
 import {
@@ -10,7 +21,6 @@ import {
   player1Markup,
   player2Markup,
 } from "../../gameLogic/utils";
-import { store } from "../../store";
 import useStyles from "./styles";
 
 const nSquares = 9;
@@ -23,16 +33,26 @@ const playerSymbols = {
 const initialSquares = Array(nSquares).fill(undefined);
 
 export default function Game() {
-  const globalState = useContext(store);
-
   const [squares, setSquares] = useState(initialSquares);
   const [isPlayer1Turn, setIsPlayer1Turn] = useState(true);
   const [winCounter, setWinCounter] = useState({ player1: 0, player2: 0 });
   const [currentWinner, setCurrentWinner] = useState(null);
   const [hasTied, setHasTied] = useState(false);
   const [areSquaresDisabled, setAreSquaresDisabled] = useState(false);
+  const [mode, setMode] = useState("single");
+  const [botDifficult, setBotDifficult] = useState("impossible");
 
   const classes = useStyles();
+
+  function handleModeChange(event) {
+    const { value } = event.target;
+    setMode(value);
+  }
+
+  function handleBotDifficultChange(event) {
+    const { value } = event.target;
+    setBotDifficult(value);
+  }
 
   function restartGame() {
     setCurrentWinner(null);
@@ -47,7 +67,7 @@ export default function Game() {
   }
 
   function isBotTurn() {
-    return !isPlayer1Turn && globalState.state.mode === "single";
+    return !isPlayer1Turn && mode === "single";
   }
 
   function handleClickSquare(squareIndex) {
@@ -83,10 +103,7 @@ export default function Game() {
   function triggerBotPlay() {
     setAreSquaresDisabled(true);
 
-    const nextSquare = getBotNextSquare(
-      globalState.state.botDifficult,
-      squares
-    );
+    const nextSquare = getBotNextSquare(botDifficult, squares);
     handleClickSquare(nextSquare);
 
     setAreSquaresDisabled(false);
@@ -100,11 +117,52 @@ export default function Game() {
 
   return (
     <Container maxWidth="xs" className={classes.container}>
-      <Grid container>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
-          {globalState.state.player1Name}: {winCounter.player1},{" "}
-          {globalState.state.player2Name}: {winCounter.player2}
+          <FormControl component="fieldset" fullWidth>
+            <RadioGroup
+              row
+              name="mode"
+              onChange={handleModeChange}
+              value={mode}
+            >
+              <FormControlLabel
+                control={<Radio />}
+                label="1 player"
+                value="single"
+              ></FormControlLabel>
+
+              <FormControlLabel
+                control={<Radio />}
+                label="2 players"
+                value="multi"
+              ></FormControlLabel>
+            </RadioGroup>
+          </FormControl>
         </Grid>
+
+        <Grid item xs={12}>
+          <FormControl fullWidth disabled={mode !== "single"}>
+            <InputLabel id="botDifficult">Bot difficult</InputLabel>
+            <Select
+              labelId="botDifficult"
+              label="Bot difficult"
+              name="botDifficult"
+              onChange={handleBotDifficultChange}
+              value={botDifficult}
+            >
+              <MenuItem value="easy">Easy</MenuItem>
+              <MenuItem value="medium">Medium</MenuItem>
+              <MenuItem value="impossible">Impossible</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid item xs={12}>
+          Player 1: {winCounter.player1},{" "}
+          {mode === "single" ? "bot" : "Player 2"}: {winCounter.player2}
+        </Grid>
+
         <Grid item xs={12}>
           {currentWinner || hasTied ? (
             <Grid
@@ -123,7 +181,6 @@ export default function Game() {
             </Box>
           )}
         </Grid>
-        <Link to="/">Home</Link>
       </Grid>
     </Container>
   );
