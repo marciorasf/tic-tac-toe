@@ -5,13 +5,11 @@ import {
   Container,
   Grid,
   ButtonBase,
-  RadioGroup,
-  Radio,
   FormControl,
-  FormControlLabel,
   Select,
   MenuItem,
   InputLabel,
+  Typography,
 } from "@material-ui/core";
 
 import { getBotNextSquare } from "../../gameLogic";
@@ -117,69 +115,85 @@ export default function Game() {
 
   return (
     <Container maxWidth="xs" className={classes.container}>
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
-          <FormControl component="fieldset" fullWidth>
-            <RadioGroup
-              row
-              name="mode"
-              onChange={handleModeChange}
-              value={mode}
-            >
-              <FormControlLabel
-                control={<Radio />}
-                label="1 player"
-                value="single"
-              ></FormControlLabel>
-
-              <FormControlLabel
-                control={<Radio />}
-                label="2 players"
-                value="multi"
-              ></FormControlLabel>
-            </RadioGroup>
-          </FormControl>
-        </Grid>
-
-        <Grid item xs={12}>
-          <FormControl fullWidth disabled={mode !== "single"}>
-            <InputLabel id="botDifficult">Bot difficult</InputLabel>
-            <Select
-              labelId="botDifficult"
-              label="Bot difficult"
-              name="botDifficult"
-              onChange={handleBotDifficultChange}
-              value={botDifficult}
-            >
-              <MenuItem value="easy">Easy</MenuItem>
-              <MenuItem value="medium">Medium</MenuItem>
-              <MenuItem value="impossible">Impossible</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-
-        <Grid item xs={12}>
-          Player 1: {winCounter.player1},{" "}
-          {mode === "single" ? "bot" : "Player 2"}: {winCounter.player2}
-        </Grid>
-
-        <Grid item xs={12}>
-          {currentWinner || hasTied ? (
-            <Grid
-              container
-              justify="center"
-              alignItems="center"
-              onClick={restartGame}
-            >
-              {currentWinner ? `${currentWinner} won` : "Tied"}
-              <br />
-              Click again to restart
+          <Grid container spacing={4}>
+            <Grid item xs={12}>
+              <Typography variant="h1" component="h1">
+                Tic Tac Toe
+              </Typography>
             </Grid>
-          ) : (
-            <Box container className={classes.table}>
-              {Squares()}
-            </Box>
-          )}
+
+            <Grid item xs={6}>
+              <FormControl fullWidth>
+                <InputLabel id="mode">Mode</InputLabel>
+                <Select
+                  labelId="mode"
+                  label="Mode"
+                  onChange={handleModeChange}
+                  value={mode}
+                >
+                  <MenuItem value="single">single-player</MenuItem>
+                  <MenuItem value="multi">multiplayer</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={6}>
+              <FormControl fullWidth disabled={mode !== "single"}>
+                <InputLabel id="botDifficult">Bot difficult</InputLabel>
+                <Select
+                  labelId="botDifficult"
+                  label="Bot difficult"
+                  onChange={handleBotDifficultChange}
+                  value={botDifficult}
+                >
+                  <MenuItem value="easy">Easy</MenuItem>
+                  <MenuItem value="medium">Medium</MenuItem>
+                  <MenuItem value="hard">Hard</MenuItem>
+                  <MenuItem value="impossible">Impossible</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Grid container>
+            <Grid item xs={12}>
+              <Grid container justify="space-around">
+                <Grid item xs={3}>
+                  <Typography>Player 1: {winCounter.player1} </Typography>
+                </Grid>
+
+                <Grid item xs={3}>
+                  <Typography>
+                    {mode === "single" ? "bot" : "Player 2"}:{" "}
+                    {winCounter.player2}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12}>
+              {currentWinner || hasTied ? (
+                <Grid
+                  container
+                  justify="center"
+                  alignItems="center"
+                  onClick={restartGame}
+                >
+                  {currentWinner ? `${currentWinner} won` : "Tied"}
+                  <br />
+                  Click again to restart
+                </Grid>
+              ) : (
+                <Box container className={classes.table}>
+                  {Squares()}
+                </Box>
+              )}
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Container>

@@ -13,7 +13,7 @@ const theme = createMuiTheme({
   },
   typography: {
     h1: {
-      fontSize: "5rem",
+      fontSize: "4rem",
     },
   },
 });
