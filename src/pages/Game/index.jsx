@@ -120,7 +120,13 @@ export default function Game() {
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <Typography variant="h1" component="h1">
-                Tic Tac Toe
+                tic-tac-toe
+              </Typography>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography variant="h2" component="h2">
+                @marciorasf
               </Typography>
             </Grid>
 
