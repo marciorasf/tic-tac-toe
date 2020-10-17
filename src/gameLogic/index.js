@@ -1,7 +1,7 @@
-import easyBotNextSquare from "./easyBot";
-import hardBotNextSquare from "./hardBot";
-import impossibleBotNextSquare from "./impossibleBot";
-import mediumBotNextSquare from "./mediumBot";
+import easyBotNextSquare from "./easyBotNextSquare";
+import hardBotNextSquare from "./hardBotNextSquare";
+import impossibleBotNextSquare from "./impossibleBotNextSquare";
+import mediumBotNextSquare from "./mediumBotNextSquare";
 
 export function getBotNextSquare(bot, squares) {
   switch (bot) {

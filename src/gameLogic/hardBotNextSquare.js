@@ -1,5 +1,5 @@
-import impossibleBotNextSquare from "./impossibleBot";
-import mediumBotNextSquare from "./mediumBot";
+import impossibleBotNextSquare from "./impossibleBotNextSquare";
+import mediumBotNextSquare from "./mediumBotNextSquare";
 import { botMarkup } from "./utils";
 
 export default function hardBotNextSquare(squares) {
