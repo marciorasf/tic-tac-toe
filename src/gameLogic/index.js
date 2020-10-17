@@ -3,19 +3,19 @@ import hardBotNextSquare from "./hardBot";
 import impossibleBotNextSquare from "./impossibleBot";
 import mediumBotNextSquare from "./mediumBot";
 
-export function getBotNextSquare(bot, squares, player) {
+export function getBotNextSquare(bot, squares) {
   switch (bot) {
     case "easy":
       return easyBotNextSquare(squares);
 
     case "medium":
-      return mediumBotNextSquare(squares, player);
+      return mediumBotNextSquare(squares);
 
     case "hard":
-      return hardBotNextSquare(squares, player);
+      return hardBotNextSquare(squares);
 
     case "impossible":
-      return impossibleBotNextSquare(squares, player);
+      return impossibleBotNextSquare(squares);
 
     default:
       return null;

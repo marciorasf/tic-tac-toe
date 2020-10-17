@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { Box, Container, Grid, ButtonBase, Button } from "@material-ui/core";
+import { Box, Container, Grid, ButtonBase } from "@material-ui/core";
 
 import { getBotNextSquare } from "../../gameLogic";
 import { calculateWinner, calculateTie } from "../../gameLogic/utils";
@@ -80,8 +80,7 @@ export default function Game() {
       setAreSquaresDisabled(true);
       const nextSquare = getBotNextSquare(
         globalState.state.botDifficult,
-        squares,
-        "player2"
+        squares
       );
       handleClickSquare(nextSquare);
       setAreSquaresDisabled(false);

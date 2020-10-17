@@ -1,6 +1,10 @@
 export const botSymbol = "O";
 export const playerSymbol = "X";
 
+export const player1Markup = "player1";
+export const player2Markup = "player2";
+export const botMarkup = "player2";
+
 export const winnerPlays = [
   [0, 1, 2],
   [3, 4, 5],

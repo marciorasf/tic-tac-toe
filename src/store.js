@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from "react";
 
 const initialState = {
   mode: "single",
-  botDifficult: "easy",
+  botDifficult: "impossible",
   player1Name: "Player 1",
   player2Name: "Player 2",
 };

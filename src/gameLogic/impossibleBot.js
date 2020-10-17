@@ -1,16 +1,16 @@
 import {
   getWinnerPlayIfExists,
   getProcessedPossibleWinnerPlays,
-  randomInt,
-  getFreeSquares,
+  player1Markup,
+  botMarkup,
 } from "./utils";
 
-export default function impossibleBotNextSquare(squares, botPlayer) {
+export default function impossibleBotNextSquare(squares) {
   const processedWinnerPlays = getProcessedPossibleWinnerPlays(squares);
 
   const botWinnerSquareIndex = getWinnerPlayIfExists(
     processedWinnerPlays,
-    botPlayer
+    botMarkup
   );
 
   if (botWinnerSquareIndex) {
@@ -19,7 +19,7 @@ export default function impossibleBotNextSquare(squares, botPlayer) {
 
   const userWinnerSquareIndex = getWinnerPlayIfExists(
     processedWinnerPlays,
-    "player1"
+    player1Markup
   );
 
   if (userWinnerSquareIndex) {
@@ -28,7 +28,7 @@ export default function impossibleBotNextSquare(squares, botPlayer) {
 
   const squaresWithRivalInfo = Array(9).fill(0);
 
-  processedWinnerPlays.filter((play) => play[botPlayer] === 0);
+  processedWinnerPlays.filter((play) => play[botMarkup] === 0);
 
   processedWinnerPlays.forEach((play) => {
     play.empty.forEach((squareIndex) => {

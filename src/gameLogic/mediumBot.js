@@ -3,14 +3,15 @@ import {
   getProcessedPossibleWinnerPlays,
   randomInt,
   getFreeSquares,
+  botMarkup,
 } from "./utils";
 
-export default function mediumBotNextSquare(squares, botPlayer) {
+export default function mediumBotNextSquare(squares) {
   const processedWinnerPlays = getProcessedPossibleWinnerPlays(squares);
 
   const winnerSquareIndex = getWinnerPlayIfExists(
     processedWinnerPlays,
-    botPlayer
+    botMarkup
   );
 
   if (winnerSquareIndex) {
@@ -18,7 +19,7 @@ export default function mediumBotNextSquare(squares, botPlayer) {
   }
 
   processedWinnerPlays.sort((playA, playB) => {
-    const result = playB[botPlayer].length - playA[botPlayer].length;
+    const result = playB[botMarkup].length - playA[botMarkup].length;
 
     if (result === 0) {
       return Math.random() - 0.5;
@@ -28,7 +29,7 @@ export default function mediumBotNextSquare(squares, botPlayer) {
   });
 
   const filteredPlays = processedWinnerPlays.filter(
-    (play) => play[botPlayer].length + play.empty.length === 3
+    (play) => play[botMarkup].length + play.empty.length === 3
   );
 
   if (filteredPlays[0]) {
