@@ -4,7 +4,12 @@ import { Link } from "react-router-dom";
 import { Box, Container, Grid, ButtonBase } from "@material-ui/core";
 
 import { getBotNextSquare } from "../../gameLogic";
-import { calculateWinner, calculateTie } from "../../gameLogic/utils";
+import {
+  calculateWinner,
+  calculateTie,
+  player1Markup,
+  player2Markup,
+} from "../../gameLogic/utils";
 import { store } from "../../store";
 import useStyles from "./styles";
 
@@ -47,7 +52,7 @@ export default function Game() {
 
   function handleClickSquare(squareIndex) {
     const currentSquares = squares.slice();
-    currentSquares[squareIndex] = isPlayer1Turn ? "player1" : "player2";
+    currentSquares[squareIndex] = isPlayer1Turn ? player1Markup : player2Markup;
     setSquares(currentSquares);
 
     const winner = calculateWinner(currentSquares);
@@ -75,15 +80,19 @@ export default function Game() {
     ));
   }
 
+  function triggerBotPlay() {
+    setAreSquaresDisabled(true);
+    const nextSquare = getBotNextSquare(
+      globalState.state.botDifficult,
+      squares
+    );
+    handleClickSquare(nextSquare);
+    setAreSquaresDisabled(false);
+  }
+
   useEffect(() => {
     if (isBotTurn()) {
-      setAreSquaresDisabled(true);
-      const nextSquare = getBotNextSquare(
-        globalState.state.botDifficult,
-        squares
-      );
-      handleClickSquare(nextSquare);
-      setAreSquaresDisabled(false);
+      triggerBotPlay();
     }
   }, [squares]);
 
