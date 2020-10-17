@@ -1,6 +1,3 @@
-export const botSymbol = "O";
-export const playerSymbol = "X";
-
 export const player1Markup = "player1";
 export const player2Markup = "player2";
 export const botMarkup = "player2";
@@ -28,7 +25,17 @@ export function getFreeSquares(squares) {
   return freeSquares;
 }
 
-export function getProcessedPossibleWinnerPlays(squares) {
+/*
+ * return an array with an object for each of winnerPlays elements
+ * the objects have the following format
+ * {
+ *   playIndex: number,
+ *   empty: [indexes of the empty squares of the play],
+ *   player1: [indexes of the player1 squares of the play],
+ *   player2: [indexes of the player2 squares of the play]
+ * }
+ */
+export function getWinnerPlaysWithInfo(squares) {
   return winnerPlays.map((play, index) => {
     const processedPlay = {
       playIndex: index,
@@ -53,8 +60,8 @@ export function getProcessedPossibleWinnerPlays(squares) {
   });
 }
 
-export function getWinnerPlayIfExists(processedWinnerPlays, player) {
-  for (const play of processedWinnerPlays) {
+export function getWinnerPlayIfExists(winnerPlaysWithInfo, player) {
+  for (const play of winnerPlaysWithInfo) {
     if (play[player].length === 2 && play.empty.length === 1) {
       return play.empty[0];
     }

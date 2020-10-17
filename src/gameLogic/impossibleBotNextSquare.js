@@ -1,12 +1,12 @@
 import {
   getWinnerPlayIfExists,
-  getProcessedPossibleWinnerPlays,
+  getWinnerPlaysWithInfo,
   player1Markup,
   botMarkup,
 } from "./utils";
 
 export default function impossibleBotNextSquare(squares) {
-  const processedWinnerPlays = getProcessedPossibleWinnerPlays(squares);
+  const processedWinnerPlays = getWinnerPlaysWithInfo(squares);
 
   const botWinnerSquareIndex = getWinnerPlayIfExists(
     processedWinnerPlays,

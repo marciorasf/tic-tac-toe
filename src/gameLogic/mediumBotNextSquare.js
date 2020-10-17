@@ -1,16 +1,16 @@
 import {
   getWinnerPlayIfExists,
-  getProcessedPossibleWinnerPlays,
+  getWinnerPlaysWithInfo,
   randomInt,
   getFreeSquares,
   botMarkup,
 } from "./utils";
 
 export default function mediumBotNextSquare(squares) {
-  const processedWinnerPlays = getProcessedPossibleWinnerPlays(squares);
+  const winnerPlaysWithInfo = getWinnerPlaysWithInfo(squares);
 
   const winnerSquareIndex = getWinnerPlayIfExists(
-    processedWinnerPlays,
+    winnerPlaysWithInfo,
     botMarkup
   );
 
@@ -18,7 +18,8 @@ export default function mediumBotNextSquare(squares) {
     return winnerSquareIndex;
   }
 
-  processedWinnerPlays.sort((playA, playB) => {
+  // sort plays by number of bot squares (descending)
+  winnerPlaysWithInfo.sort((playA, playB) => {
     const result = playB[botMarkup].length - playA[botMarkup].length;
 
     if (result === 0) {
@@ -28,12 +29,15 @@ export default function mediumBotNextSquare(squares) {
     return result;
   });
 
-  const filteredPlays = processedWinnerPlays.filter(
+  // removes plays that have rival squares
+  const possibleWinnerPlays = winnerPlaysWithInfo.filter(
     (play) => play[botMarkup].length + play.empty.length === 3
   );
 
-  if (filteredPlays[0]) {
-    return filteredPlays[0].empty[0];
+  // if there is at least one possible winner play, return it
+  const nextPlay = possibleWinnerPlays[0];
+  if (nextPlay) {
+    return nextPlay.empty[randomInt(nextPlay.empty.length)];
   }
 
   const freeSquares = getFreeSquares(squares);

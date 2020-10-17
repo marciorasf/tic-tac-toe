@@ -82,11 +82,13 @@ export default function Game() {
 
   function triggerBotPlay() {
     setAreSquaresDisabled(true);
+
     const nextSquare = getBotNextSquare(
       globalState.state.botDifficult,
       squares
     );
     handleClickSquare(nextSquare);
+
     setAreSquaresDisabled(false);
   }
 
