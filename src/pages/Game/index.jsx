@@ -78,7 +78,11 @@ export default function Game() {
   useEffect(() => {
     if (isBotTurn()) {
       setAreSquaresDisabled(true);
-      const nextSquare = getBotNextSquare("medium", squares, "player2");
+      const nextSquare = getBotNextSquare(
+        globalState.state.botDifficult,
+        squares,
+        "player2"
+      );
       handleClickSquare(nextSquare);
       setAreSquaresDisabled(false);
     }
@@ -109,7 +113,6 @@ export default function Game() {
             </Box>
           )}
         </Grid>
-        <Button onClick={restartGame}>Restart</Button>
         <Link to="/">Home</Link>
       </Grid>
     </Container>
