@@ -24,9 +24,40 @@ export function getFreeSquares(squares) {
   return freeSquares;
 }
 
-export function getNextWinnerPlayIfExists(squares, playerSymbol) {}
+export function getProcessedPossibleWinnerPlays(squares) {
+  return winnerPlays.map((play, index) => {
+    const processedPlay = {
+      playIndex: index,
+      empty: [],
+      player1: [],
+      player2: [],
+    };
 
-export function getWinnerPlaysPossibilities(square, playerSymbol) {}
+    play.forEach((squareIndex) => {
+      const square = squares[squareIndex];
+
+      if (square === "player1") {
+        processedPlay.player1.push(squareIndex);
+      } else if (square === "player2") {
+        processedPlay.player2.push(squareIndex);
+      } else {
+        processedPlay.empty.push(squareIndex);
+      }
+    });
+
+    return processedPlay;
+  });
+}
+
+export function getWinnerPlayIfExists(processedWinnerPlays, player) {
+  for (const play of processedWinnerPlays) {
+    if (play[player].length === 2 && play.empty.length === 1) {
+      return play.empty[0];
+    }
+  }
+
+  return false;
+}
 
 export function calculateWinner(squares) {
   for (const play of winnerPlays) {
