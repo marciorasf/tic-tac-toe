@@ -4,9 +4,24 @@ export default makeStyles((theme) => {
   const cellSize = 120;
 
   return {
-    container:{
+    dividerSmall: {
+      width: "100%",
+      margin: theme.spacing(0.5, 0),
+      border: 0,
+    },
+    dividerMedium: {
+      width: "100%",
+      margin: theme.spacing(1.5, 0),
+      border: 0,
+    },
+    dividerLarge: {
+      width: "100%",
+      margin: theme.spacing(3, 0),
+      border: 0,
+    },
+    container: {
       display: "flex",
-      justifyContent: "center"
+      justifyContent: "center",
     },
     table: {
       display: "grid",

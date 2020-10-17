@@ -115,23 +115,19 @@ export default function Game() {
 
   return (
     <Container maxWidth="xs" className={classes.container}>
-      <Grid container spacing={2}>
+      <Grid container justify="center">
+        <hr className={classes.dividerMedium} />
+
+        <Typography variant="h1" component="h1">
+          tic-tac-toe
+        </Typography>
+
+        <hr className={classes.dividerLarge} />
+
         <Grid item xs={12}>
-          <Grid container spacing={4}>
-            <Grid item xs={12}>
-              <Typography variant="h1" component="h1">
-                tic-tac-toe
-              </Typography>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Typography variant="h2" component="h2">
-                @marciorasf
-              </Typography>
-            </Grid>
-
+          <Grid container spacing={6}>
             <Grid item xs={6}>
-              <FormControl fullWidth>
+              <FormControl fullWidth variant="outlined">
                 <InputLabel id="mode">Mode</InputLabel>
                 <Select
                   labelId="mode"
@@ -146,7 +142,11 @@ export default function Game() {
             </Grid>
 
             <Grid item xs={6}>
-              <FormControl fullWidth disabled={mode !== "single"}>
+              <FormControl
+                fullWidth
+                disabled={mode !== "single"}
+                variant="outlined"
+              >
                 <InputLabel id="botDifficult">Bot difficult</InputLabel>
                 <Select
                   labelId="botDifficult"
@@ -164,41 +164,42 @@ export default function Game() {
           </Grid>
         </Grid>
 
+        <hr className={classes.dividerMedium} />
+
         <Grid item xs={12}>
-          <Grid container>
-            <Grid item xs={12}>
-              <Grid container justify="space-around">
-                <Grid item xs={3}>
-                  <Typography>Player 1: {winCounter.player1} </Typography>
-                </Grid>
-
-                <Grid item xs={3}>
-                  <Typography>
-                    {mode === "single" ? "bot" : "Player 2"}:{" "}
-                    {winCounter.player2}
-                  </Typography>
-                </Grid>
-              </Grid>
+          <Grid container justify="space-around">
+            <Grid item xs={3}>
+              <Typography>Player 1: {winCounter.player1} </Typography>
             </Grid>
 
-            <Grid item xs={12}>
-              {currentWinner || hasTied ? (
-                <Grid
-                  container
-                  justify="center"
-                  alignItems="center"
-                  onClick={restartGame}
-                >
-                  {currentWinner ? `${currentWinner} won` : "Tied"}
-                  <br />
-                  Click again to restart
-                </Grid>
-              ) : (
-                <Box container className={classes.table}>
-                  {Squares()}
-                </Box>
-              )}
+            <Grid item xs={3}>
+              <Typography>
+                {mode === "single" ? "bot" : "Player 2"}: {winCounter.player2}
+              </Typography>
             </Grid>
+          </Grid>
+        </Grid>
+
+        <hr className={classes.dividerMedium} />
+
+        <Grid item xs={12}>
+          <Grid
+            container
+            justify="center"
+            alignItems="center"
+            onClick={restartGame}
+          >
+            {currentWinner || hasTied ? (
+              <>
+                {currentWinner ? `${currentWinner} won` : "Tied"}
+                <br />
+                Click again to restart
+              </>
+            ) : (
+              <Box container className={classes.table}>
+                {Squares()}
+              </Box>
+            )}
           </Grid>
         </Grid>
       </Grid>

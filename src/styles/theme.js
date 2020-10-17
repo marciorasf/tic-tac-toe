@@ -11,14 +11,9 @@ const theme = createMuiTheme({
   },
   typography: {
     h1: {
-      fontSize: "4rem",
-      fontFamily: "Pacifico, sans-serif",
-      color: "#333333",
-    },
-    h2: {
       fontSize: "3rem",
       fontFamily: "Pacifico, sans-serif",
-      color: "#333333",
+      color: "#222222",
     },
   },
 });
