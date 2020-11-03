@@ -23,6 +23,19 @@ export default makeStyles((theme) => {
       display: "flex",
       justifyContent: "center",
     },
+    playerScore: {
+      fontSize: 20,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+
+      "&>img": {
+        height: 20,
+      },
+    },
+    underlineScore: {
+      borderBottom: "2px solid red",
+    },
     table: {
       display: "grid",
       gridTemplateRows: `repeat(3, ${cellSize}px)`,

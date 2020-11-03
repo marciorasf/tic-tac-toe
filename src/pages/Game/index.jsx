@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { useState, useEffect } from "react";
 
 import {
@@ -172,13 +173,24 @@ export default function Game() {
 
         <Grid item xs={12}>
           <Grid container justify="space-around">
-            <Grid item xs={3}>
-              <Typography>X: {winCounter.player1} </Typography>
-            </Grid>
+            {Object.keys(playerSymbols).map((player) => {
+              const isPlayerTurn =
+                player === "player1" ? isPlayer1Turn : !isPlayer1Turn;
 
-            <Grid item xs={3}>
-              <Typography>O: {winCounter.player2}</Typography>
-            </Grid>
+              return (
+                <Grid item xs={3} key={player}>
+                  <Typography
+                    className={clsx(
+                      classes.playerScore,
+                      isPlayerTurn && classes.underlineScore
+                    )}
+                  >
+                    <img src={playerSymbols[player]} height={10} />
+                    <span>{winCounter[player]}</span>
+                  </Typography>
+                </Grid>
+              );
+            })}
           </Grid>
         </Grid>
 
@@ -190,7 +202,14 @@ export default function Game() {
               <Grid container justify="center" align="center" spacing={2}>
                 <Grid item xs={12}>
                   <Typography component="p" className={classes.endGameMessage}>
-                    {currentWinner ? `${currentWinner} won!` : "Tied!"}
+                    {currentWinner ? (
+                      <Typography>
+                        <img src={playerSymbols[currentWinner]} height={20} />
+                        Won!
+                      </Typography>
+                    ) : (
+                      "Tied!"
+                    )}
                   </Typography>
                 </Grid>
 
