@@ -42,5 +42,8 @@ export default makeStyles((theme) => {
       justifyContent: "center",
       alignItems: "center",
     },
+    endGameMessage: {
+      textTransform: "uppercase",
+    },
   };
 });

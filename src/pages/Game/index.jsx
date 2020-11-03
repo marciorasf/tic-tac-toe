@@ -10,6 +10,7 @@ import {
   MenuItem,
   InputLabel,
   Typography,
+  Button,
 } from "@material-ui/core";
 
 import { getBotNextSquare } from "../../gameLogic";
@@ -85,19 +86,6 @@ export default function Game() {
     setIsPlayer1Turn(!isPlayer1Turn);
   }
 
-  function Squares() {
-    return squares.map((square, index) => (
-      <ButtonBase
-        key={index}
-        className={classes.cell}
-        onClick={() => handleClickSquare(index)}
-        disabled={square || areSquaresDisabled}
-      >
-        {playerSymbols[square]}
-      </ButtonBase>
-    ));
-  }
-
   function triggerBotPlay() {
     setAreSquaresDisabled(true);
 
@@ -112,6 +100,19 @@ export default function Game() {
       triggerBotPlay();
     }
   }, [squares]);
+
+  function Squares() {
+    return squares.map((square, index) => (
+      <ButtonBase
+        key={index}
+        className={classes.cell}
+        onClick={() => handleClickSquare(index)}
+        disabled={square || areSquaresDisabled}
+      >
+        {playerSymbols[square]}
+      </ButtonBase>
+    ));
+  }
 
   return (
     <Container maxWidth="xs" className={classes.container}>
@@ -135,7 +136,7 @@ export default function Game() {
                   onChange={handleModeChange}
                   value={mode}
                 >
-                  <MenuItem value="single">single-player</MenuItem>
+                  <MenuItem value="single">singleplayer</MenuItem>
                   <MenuItem value="multi">multiplayer</MenuItem>
                 </Select>
               </FormControl>
@@ -173,9 +174,7 @@ export default function Game() {
             </Grid>
 
             <Grid item xs={3}>
-              <Typography>
-                {mode === "single" ? "bot" : "Player 2"}: {winCounter.player2}
-              </Typography>
+              <Typography>Player 2: {winCounter.player2}</Typography>
             </Grid>
           </Grid>
         </Grid>
@@ -183,22 +182,27 @@ export default function Game() {
         <hr className={classes.dividerMedium} />
 
         <Grid item xs={12}>
-          <Grid
-            container
-            justify="center"
-            alignItems="center"
-            onClick={restartGame}
-          >
+          <Grid container justify="center" alignItems="center">
             {currentWinner || hasTied ? (
-              <>
-                {currentWinner ? `${currentWinner} won` : "Tied"}
-                <br />
-                Click again to restart
-              </>
+              <Grid container justify="center" align="center" spacing={2}>
+                <Grid item xs={12}>
+                  <Typography component="p" className={classes.endGameMessage}>
+                    {currentWinner ? `${currentWinner} won!` : "Tied!"}
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={restartGame}
+                  >
+                    Restart
+                  </Button>
+                </Grid>
+              </Grid>
             ) : (
-              <Box container className={classes.table}>
-                {Squares()}
-              </Box>
+              <Box className={classes.table}>{Squares()}</Box>
             )}
           </Grid>
         </Grid>
