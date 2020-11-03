@@ -42,7 +42,7 @@ export default function Game() {
   const [hasTied, setHasTied] = useState(false);
   const [areSquaresDisabled, setAreSquaresDisabled] = useState(false);
   const [mode, setMode] = useState("single");
-  const [botDifficult, setBotDifficult] = useState("impossible");
+  const [botDifficult, setBotDifficult] = useState("hard");
 
   const classes = useStyles();
 

@@ -6,8 +6,8 @@ export default function hardBotNextSquare(squares) {
   const impossibleBotRatio = 0.8;
 
   if (Math.random() < impossibleBotRatio) {
-    impossibleBotNextSquare(squares, botMarkup);
-  } else {
-    mediumBotNextSquare(squares, botMarkup);
+    return impossibleBotNextSquare(squares, botMarkup);
   }
+
+  return mediumBotNextSquare(squares, botMarkup);
 }
