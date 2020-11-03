@@ -13,6 +13,8 @@ import {
   Button,
 } from "@material-ui/core";
 
+import circleSymbol from "../../assets/images/circle.svg";
+import timesSymbol from "../../assets/images/times.svg";
 import { getBotNextSquare } from "../../gameLogic";
 import {
   calculateWinner,
@@ -25,8 +27,8 @@ import useStyles from "./styles";
 const nSquares = 9;
 
 const playerSymbols = {
-  player1: "X",
-  player2: "0",
+  player1: timesSymbol,
+  player2: circleSymbol,
 };
 
 const initialSquares = Array(nSquares).fill(undefined);
@@ -55,6 +57,7 @@ export default function Game() {
 
   function restartGame() {
     setCurrentWinner(null);
+    setHasTied(false);
     setSquares(initialSquares);
   }
 
@@ -109,7 +112,7 @@ export default function Game() {
         onClick={() => handleClickSquare(index)}
         disabled={square || areSquaresDisabled}
       >
-        {playerSymbols[square]}
+        <img src={playerSymbols[square]} height={30} />
       </ButtonBase>
     ));
   }
@@ -170,11 +173,11 @@ export default function Game() {
         <Grid item xs={12}>
           <Grid container justify="space-around">
             <Grid item xs={3}>
-              <Typography>Player 1: {winCounter.player1} </Typography>
+              <Typography>X: {winCounter.player1} </Typography>
             </Grid>
 
             <Grid item xs={3}>
-              <Typography>Player 2: {winCounter.player2}</Typography>
+              <Typography>O: {winCounter.player2}</Typography>
             </Grid>
           </Grid>
         </Grid>
