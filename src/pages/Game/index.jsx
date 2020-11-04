@@ -37,10 +37,10 @@ const initialSquares = Array(nSquares).fill(undefined);
 export default function Game() {
   const [squares, setSquares] = useState(initialSquares);
   const [isPlayer1Turn, setIsPlayer1Turn] = useState(true);
+  const [waitingBot, setWaitingBot] = useState(false);
   const [winCounter, setWinCounter] = useState({ player1: 0, player2: 0 });
   const [currentWinner, setCurrentWinner] = useState(null);
   const [hasTied, setHasTied] = useState(false);
-  const [areSquaresDisabled, setAreSquaresDisabled] = useState(false);
   const [mode, setMode] = useState("single");
   const [botDifficult, setBotDifficult] = useState("hard");
 
@@ -91,32 +91,37 @@ export default function Game() {
   }
 
   function triggerBotPlay() {
-    setAreSquaresDisabled(true);
+    setWaitingBot(true);
 
     const nextSquare = getBotNextSquare(botDifficult, squares);
-    handleClickSquare(nextSquare);
 
-    setAreSquaresDisabled(false);
+    setTimeout(() => {
+      handleClickSquare(nextSquare);
+      setWaitingBot(false);
+    }, 250);
   }
 
   useEffect(() => {
-    if (isBotTurn()) {
+    if (isBotTurn() && !waitingBot) {
       triggerBotPlay();
     }
   }, [squares]);
 
-  function Squares() {
-    return squares.map((square, index) => (
+  const Squares = () =>
+    squares.map((square, index) => (
       <ButtonBase
         key={index}
         className={classes.cell}
         onClick={() => handleClickSquare(index)}
-        disabled={square || areSquaresDisabled}
+        disabled={square || waitingBot}
       >
-        <img src={playerSymbols[square]} height={30} />
+        <img
+          src={playerSymbols[square]}
+          height={30}
+          alt={square ? "square symbol" : ""}
+        />
       </ButtonBase>
     ));
-  }
 
   return (
     <Container maxWidth="xs" className={classes.container}>
@@ -185,7 +190,11 @@ export default function Game() {
                       isPlayerTurn && classes.underlineScore
                     )}
                   >
-                    <img src={playerSymbols[player]} height={10} />
+                    <img
+                      src={playerSymbols[player]}
+                      height={10}
+                      alt={`${player} symbol`}
+                    />
                     <span>{winCounter[player]}</span>
                   </Typography>
                 </Grid>
@@ -204,7 +213,11 @@ export default function Game() {
                   <Typography component="p" className={classes.endGameMessage}>
                     {currentWinner ? (
                       <Typography>
-                        <img src={playerSymbols[currentWinner]} height={20} />
+                        <img
+                          src={playerSymbols[currentWinner]}
+                          height={20}
+                          alt={`${currentWinner} symbol`}
+                        />
                         Won!
                       </Typography>
                     ) : (
