@@ -40,27 +40,27 @@ export default makeStyles((theme) => {
     underlineScore: {
       borderBottom: "2px solid red",
     },
-    table: {
+    board: {
       position: "relative",
       display: "grid",
       gridTemplateRows: `repeat(3, ${cellSize}px)`,
       gridTemplateColumns: `repeat(3, ${cellSize}px)`,
 
-      "& $cell:nth-child(3n + 2)": {
+      "& $boardCell:nth-child(3n + 2)": {
         borderRight: `${cellBorderWidth} solid ${cellBorderColor}`,
         borderLeft: `${cellBorderWidth} solid ${cellBorderColor}`,
       },
 
-      "& $cell:nth-child(n + 4)": {
+      "& $boardCell:nth-child(n + 4)": {
         borderTop: `${cellBorderWidth} solid ${cellBorderColor}`,
       },
     },
-    cell: {
+    boardCell: {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
     },
-    endGameMessageContainer: {
+    endGameContainer: {
       position: "absolute",
       height: "100%",
       width: "100%",
@@ -74,8 +74,7 @@ export default makeStyles((theme) => {
       justifyContent: "center",
       cursor: "pointer",
     },
-    winnerText: {
-      fontSize: 40,
+    endGameText: {
       textTransform: "uppercase",
 
       "& img": {

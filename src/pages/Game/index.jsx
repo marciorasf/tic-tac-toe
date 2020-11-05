@@ -115,7 +115,7 @@ export default function Game() {
     squares.map((square, index) => (
       <ButtonBase
         key={index}
-        className={classes.cell}
+        className={classes.boardCell}
         onClick={() => handleClickSquare(index)}
         disabled={square || waitingBot}
       >
@@ -216,17 +216,21 @@ export default function Game() {
             alignItems="center"
             style={{ position: "relative" }}
           >
-            <Box className={classes.table}>
+            <Box className={classes.board}>
               {Squares()}
 
               {isEndGame() && (
                 <Grid
                   item
                   xs={12}
-                  className={classes.endGameMessageContainer}
+                  className={classes.endGameContainer}
                   onClick={restartGame}
                 >
-                  <Typography component="p" className={classes.winnerText}>
+                  <Typography
+                    component="p"
+                    variant="h2"
+                    className={classes.endGameText}
+                  >
                     {currentWinner ? (
                       <>
                         <img
@@ -240,9 +244,11 @@ export default function Game() {
                     )}
                   </Typography>
 
-                  <hr className={classes.dividerSmall} />
+                  <hr className={classes.dividerMedium} />
 
-                  <Typography>Click to restart</Typography>
+                  <Typography component="p" variant="body1">
+                    Click to restart.
+                  </Typography>
                 </Grid>
               )}
             </Box>
