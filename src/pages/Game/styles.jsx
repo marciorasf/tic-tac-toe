@@ -2,6 +2,8 @@ import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles((theme) => {
   const cellSize = 120;
+  const cellBorderWidth = "2px";
+  const cellBorderColor = "black";
 
   return {
     dividerSmall: {
@@ -22,6 +24,7 @@ export default makeStyles((theme) => {
     container: {
       display: "flex",
       justifyContent: "center",
+      maxWidth: cellSize * 3,
     },
     playerScore: {
       fontSize: 20,
@@ -44,12 +47,12 @@ export default makeStyles((theme) => {
       gridTemplateColumns: `repeat(3, ${cellSize}px)`,
 
       "& $cell:nth-child(3n + 2)": {
-        borderRight: "1px solid black",
-        borderLeft: "1px solid black",
+        borderRight: `${cellBorderWidth} solid ${cellBorderColor}`,
+        borderLeft: `${cellBorderWidth} solid ${cellBorderColor}`,
       },
 
       "& $cell:nth-child(n + 4)": {
-        borderTop: "1px solid black",
+        borderTop: `${cellBorderWidth} solid ${cellBorderColor}`,
       },
     },
     cell: {
@@ -57,19 +60,23 @@ export default makeStyles((theme) => {
       justifyContent: "center",
       alignItems: "center",
     },
-    endGameMessage: {
+    endGameMessageContainer: {
       position: "absolute",
       height: "100%",
       width: "100%",
       top: 0,
       left: 0,
       backgroundColor: "rgba(0,0,0,0.25)",
-      backdropFilter: "blur(3px)",
-      textTransform: "uppercase",
-      fontSize: 40,
+      backdropFilter: "blur(5px)",
       display: "flex",
+      flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
+      cursor: "pointer",
+    },
+    winnerText: {
+      fontSize: 40,
+      textTransform: "uppercase",
 
       "& img": {
         paddingRight: theme.spacing(3),

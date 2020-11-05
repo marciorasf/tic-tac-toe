@@ -128,7 +128,7 @@ export default function Game() {
     ));
 
   return (
-    <Container maxWidth="xs" className={classes.container}>
+    <Container disableGutters maxWidth={false} className={classes.container}>
       <Grid container justify="center">
         <hr className={classes.dividerMedium} />
 
@@ -138,7 +138,7 @@ export default function Game() {
 
         <hr className={classes.dividerLarge} />
 
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Grid container spacing={8}>
             <Grid item xs={6}>
               <FormControl fullWidth variant="outlined">
@@ -178,7 +178,7 @@ export default function Game() {
           </Grid>
         </Grid>
 
-        <hr className={classes.dividerLarge} />
+        <hr className={classes.dividerLarge} /> */}
 
         <Grid item xs={12}>
           <Grid container spacing={8}>
@@ -220,36 +220,32 @@ export default function Game() {
               {Squares()}
 
               {isEndGame() && (
-                <Grid item xs={12} className={classes.endGameMessage}>
-                  {currentWinner ? (
-                    <>
-                      <img
-                        src={playerSymbols[currentWinner]}
-                        alt={`${currentWinner} symbol`}
-                      />
-                      Won!
-                    </>
-                  ) : (
-                    "Tied!"
-                  )}
+                <Grid
+                  item
+                  xs={12}
+                  className={classes.endGameMessageContainer}
+                  onClick={restartGame}
+                >
+                  <Typography component="p" className={classes.winnerText}>
+                    {currentWinner ? (
+                      <>
+                        <img
+                          src={playerSymbols[currentWinner]}
+                          alt={`${currentWinner} symbol`}
+                        />
+                        Won!
+                      </>
+                    ) : (
+                      "Tied!"
+                    )}
+                  </Typography>
+
+                  <hr className={classes.dividerSmall} />
+
+                  <Typography>Click to restart</Typography>
                 </Grid>
               )}
             </Box>
-            {isEndGame() && (
-              <>
-                <hr className={classes.dividerMedium} />
-
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={restartGame}
-                  >
-                    Restart
-                  </Button>
-                </Grid>
-              </>
-            )}
           </Grid>
         </Grid>
       </Grid>
