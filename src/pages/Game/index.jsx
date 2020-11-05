@@ -39,7 +39,7 @@ export default function Game() {
   const [isPlayer1Turn, setIsPlayer1Turn] = useState(true);
   const [waitingBot, setWaitingBot] = useState(false);
   const [winCounter, setWinCounter] = useState({ player1: 0, player2: 0 });
-  const [currentWinner, setCurrentWinner] = useState(null);
+  const [currentWinner, setCurrentWinner] = useState("player1");
   const [hasTied, setHasTied] = useState(false);
   const [mode, setMode] = useState("single");
   const [botDifficult, setBotDifficult] = useState("hard");
@@ -101,11 +101,15 @@ export default function Game() {
     }, 250);
   }
 
+  function isEndGame() {
+    return currentWinner || hasTied;
+  }
+
   useEffect(() => {
     if (isBotTurn() && !waitingBot) {
       triggerBotPlay();
     }
-  }, [squares]);
+  }, [squares, mode]);
 
   const Squares = () =>
     squares.map((square, index) => (
@@ -135,7 +139,7 @@ export default function Game() {
         <hr className={classes.dividerLarge} />
 
         <Grid item xs={12}>
-          <Grid container spacing={6}>
+          <Grid container spacing={8}>
             <Grid item xs={6}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel id="mode">Mode</InputLabel>
@@ -174,16 +178,16 @@ export default function Game() {
           </Grid>
         </Grid>
 
-        <hr className={classes.dividerMedium} />
+        <hr className={classes.dividerLarge} />
 
         <Grid item xs={12}>
-          <Grid container justify="space-around">
+          <Grid container spacing={8}>
             {Object.keys(playerSymbols).map((player) => {
               const isPlayerTurn =
                 player === "player1" ? isPlayer1Turn : !isPlayer1Turn;
 
               return (
-                <Grid item xs={3} key={player}>
+                <Grid item xs={6} key={player}>
                   <Typography
                     className={clsx(
                       classes.playerScore,
@@ -203,30 +207,39 @@ export default function Game() {
           </Grid>
         </Grid>
 
-        <hr className={classes.dividerMedium} />
+        <hr className={classes.dividerLarge} />
 
         <Grid item xs={12}>
-          <Grid container justify="center" alignItems="center">
-            {currentWinner || hasTied ? (
-              <Grid container justify="center" align="center" spacing={2}>
-                <Grid item xs={12}>
-                  <Typography component="p" className={classes.endGameMessage}>
-                    {currentWinner ? (
-                      <Typography>
-                        <img
-                          src={playerSymbols[currentWinner]}
-                          height={20}
-                          alt={`${currentWinner} symbol`}
-                        />
-                        Won!
-                      </Typography>
-                    ) : (
-                      "Tied!"
-                    )}
-                  </Typography>
-                </Grid>
+          <Grid
+            container
+            justify="center"
+            alignItems="center"
+            style={{ position: "relative" }}
+          >
+            <Box className={classes.table}>
+              {Squares()}
 
-                <Grid item xs={12}>
+              {isEndGame() && (
+                <Grid item xs={12} className={classes.endGameMessage}>
+                  {currentWinner ? (
+                    <>
+                      <img
+                        src={playerSymbols[currentWinner]}
+                        alt={`${currentWinner} symbol`}
+                      />
+                      Won!
+                    </>
+                  ) : (
+                    "Tied!"
+                  )}
+                </Grid>
+              )}
+            </Box>
+            {isEndGame() && (
+              <>
+                <hr className={classes.dividerMedium} />
+
+                <Grid item>
                   <Button
                     variant="contained"
                     color="primary"
@@ -235,9 +248,7 @@ export default function Game() {
                     Restart
                   </Button>
                 </Grid>
-              </Grid>
-            ) : (
-              <Box className={classes.table}>{Squares()}</Box>
+              </>
             )}
           </Grid>
         </Grid>

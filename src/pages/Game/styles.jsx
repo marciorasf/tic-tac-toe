@@ -28,15 +28,17 @@ export default makeStyles((theme) => {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
+      borderBottom: "2px solid grey",
 
       "&>img": {
-        height: 20,
+        height: 18,
       },
     },
     underlineScore: {
       borderBottom: "2px solid red",
     },
     table: {
+      position: "relative",
       display: "grid",
       gridTemplateRows: `repeat(3, ${cellSize}px)`,
       gridTemplateColumns: `repeat(3, ${cellSize}px)`,
@@ -56,7 +58,23 @@ export default makeStyles((theme) => {
       alignItems: "center",
     },
     endGameMessage: {
+      position: "absolute",
+      height: "100%",
+      width: "100%",
+      top: 0,
+      left: 0,
+      backgroundColor: "rgba(0,0,0,0.25)",
+      backdropFilter: "blur(3px)",
       textTransform: "uppercase",
+      fontSize: 40,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+
+      "& img": {
+        paddingRight: theme.spacing(3),
+        height: 32,
+      },
     },
   };
 });
