@@ -29,6 +29,9 @@ export default makeStyles((theme) => {
       justifyContent: "center",
       maxWidth: cellSize * 3,
     },
+    settingsIcon: {
+      color: "rgba(255,255,255,0.85)",
+    },
     playerScore: {
       fontSize: 20,
       display: "flex",
@@ -41,7 +44,7 @@ export default makeStyles((theme) => {
       },
     },
     activePlayer: {
-      borderBottom: `2px solid rgba(255,255,255,0.85)`,
+      borderBottom: `2px solid ${theme.palette.secondary.main}`,
     },
 
     // Board elements

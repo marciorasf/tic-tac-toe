@@ -40,7 +40,7 @@ const initialSquares = Array(nSquares).fill(undefined);
 export default function Game() {
   const [mode, setMode] = useState("single");
   const [botDifficult, setBotDifficult] = useState("hard");
-  const [openSettings, setOpenSettings] = useState(false);
+  const [openSettings, setOpenSettings] = useState(true);
 
   const [squares, setSquares] = useState(initialSquares);
   const [isPlayer1Turn, setIsPlayer1Turn] = useState(true);
@@ -156,7 +156,10 @@ export default function Game() {
 
             <Grid item xs={2}>
               <Grid container justify="flex-end">
-                <IconButton onClick={handleToggleOpenSettings}>
+                <IconButton
+                  onClick={handleToggleOpenSettings}
+                  className={classes.settingsIcon}
+                >
                   <SettingsIcon style={{ fontSize: "2rem" }} />
                 </IconButton>
               </Grid>
@@ -171,7 +174,7 @@ export default function Game() {
             <Grid item xs={12}>
               <Grid container spacing={6}>
                 <Grid item xs={6}>
-                  <FormControl fullWidth size="small">
+                  <FormControl fullWidth size="small" color="secondary">
                     <InputLabel id="mode">Mode</InputLabel>
                     <Select
                       labelId="mode"
@@ -179,8 +182,8 @@ export default function Game() {
                       onChange={handleModeChange}
                       value={mode}
                     >
-                      <MenuItem value="single">singleplayer</MenuItem>
-                      <MenuItem value="multi">multiplayer</MenuItem>
+                      <MenuItem value="single">Singleplayer</MenuItem>
+                      <MenuItem value="multi">Multiplayer</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -190,6 +193,7 @@ export default function Game() {
                     fullWidth
                     disabled={mode !== "single"}
                     size="small"
+                    color="secondary"
                   >
                     <InputLabel id="botDifficult">Bot difficult</InputLabel>
                     <Select

@@ -1,6 +1,5 @@
 {
   "projects": {
-    "default": "marciorasf-tic-tac-toe",
-    "tic-tac-toe": "marciorasf-tic-tac-toe"
+    "default": "marciorasf-tic-tac-toe"
   }
 }
