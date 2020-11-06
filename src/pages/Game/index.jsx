@@ -129,11 +129,13 @@ export default function Game() {
         onClick={() => handleClickSquare(index)}
         disabled={square || waitingBot}
       >
-        <img
-          src={playerSymbols[square]}
-          height={30}
-          alt={square ? "square symbol" : ""}
-        />
+        {square && (
+          <img
+            src={playerSymbols[square]}
+            height={30}
+            alt={square ? "square symbol" : ""}
+          />
+        )}
       </ButtonBase>
     ));
 
