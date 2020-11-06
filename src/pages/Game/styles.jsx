@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 export default makeStyles((theme) => {
   const cellSize = 120;
   const cellBorderWidth = "2px";
-  const cellBorderColor = "black";
+  const cellBorderColor = "rgba(255,255,255,0.5)";
 
   return {
     // General classes
@@ -34,16 +34,15 @@ export default makeStyles((theme) => {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      borderBottom: "2px solid grey",
+      borderBottom: "2px solid rgba(255,255,255,0.3)",
 
       "&>img": {
         height: 18,
       },
     },
     activePlayer: {
-      borderBottom: "2px solid red",
+      borderBottom: `2px solid rgba(255,255,255,0.85)`,
     },
-
 
     // Board elements
     board: {
@@ -72,7 +71,7 @@ export default makeStyles((theme) => {
       width: "100%",
       top: 0,
       left: 0,
-      backgroundColor: "rgba(0,0,0,0.25)",
+      backgroundColor: "rgba(0,0,0,0.5)",
       backdropFilter: "blur(5px)",
       display: "flex",
       flexDirection: "column",
@@ -85,7 +84,7 @@ export default makeStyles((theme) => {
 
       "& img": {
         paddingRight: theme.spacing(3),
-        height: 32,
+        height: 36,
       },
     },
   };

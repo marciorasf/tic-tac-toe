@@ -45,7 +45,7 @@ export default function Game() {
   const [squares, setSquares] = useState(initialSquares);
   const [isPlayer1Turn, setIsPlayer1Turn] = useState(true);
   const [waitingBot, setWaitingBot] = useState(false);
-  const [currentWinner, setCurrentWinner] = useState("player1");
+  const [currentWinner, setCurrentWinner] = useState(null);
   const [hasTied, setHasTied] = useState(false);
 
   const [winCounter, setWinCounter] = useState({ player1: 0, player2: 0 });
@@ -239,7 +239,7 @@ export default function Game() {
           </Grid>
         </Grid>
 
-        <hr className={classes.dividerMedium} />
+        <hr className={classes.dividerLarge} />
 
         <Grid item xs={12}>
           <Grid
@@ -290,7 +290,7 @@ export default function Game() {
         <Grid item xs={12}>
           <hr className={classes.dividerLarge} />
 
-          <Grid container alignItems="center" direction="column" spacing={3}>
+          <Grid container alignItems="center" direction="column" spacing={4}>
             <Grid item>
               <Link href="https://github.com/marciorasf" variant="h3">
                 @marciorasf

@@ -5,8 +5,8 @@ const theme = createMuiTheme({
     primary: {
       main: "#88d57a",
     },
-    secondary: {
-      main: "#03056d",
+    text: {
+      primary: "#ffffff",
     },
   },
   typography: {
@@ -14,10 +14,10 @@ const theme = createMuiTheme({
     h1: {
       fontSize: "3rem",
       fontFamily: "Pacifico, sans-serif",
-      color: "#fd9cbc",
+      color: "#88d57a",
     },
     h2: {
-      fontSize: "2.8rem",
+      fontSize: "2.2rem",
       fontWeight: "500",
     },
     h3: {
