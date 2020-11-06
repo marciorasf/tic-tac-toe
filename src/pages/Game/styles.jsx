@@ -19,10 +19,11 @@ export default makeStyles((theme) => {
     },
     dividerLarge: {
       width: "100%",
-      margin: theme.spacing(3, 0),
+      margin: theme.spacing(2.5, 0),
       border: 0,
     },
 
+    // Elements before board
     container: {
       display: "flex",
       justifyContent: "center",
@@ -43,6 +44,8 @@ export default makeStyles((theme) => {
       borderBottom: "2px solid red",
     },
 
+
+    // Board elements
     board: {
       position: "relative",
       display: "grid",

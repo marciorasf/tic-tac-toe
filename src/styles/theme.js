@@ -20,6 +20,10 @@ const theme = createMuiTheme({
       fontSize: "2.8rem",
       fontWeight: "500",
     },
+    h3: {
+      fontSize: "1.8rem",
+      fontFamily: "Pacifico, sans-serif",
+    },
     body1: {
       fontSize: "1.2rem",
       fontWeight: 400,

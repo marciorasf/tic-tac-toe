@@ -1,5 +1,7 @@
 import clsx from "clsx";
 import React, { useState, useEffect } from "react";
+import { FaGithub as GithubIcon } from "react-icons/fa";
+import { FiSettings as SettingsIcon } from "react-icons/fi";
 
 import {
   Box,
@@ -12,8 +14,8 @@ import {
   InputLabel,
   Typography,
   IconButton,
+  Link,
 } from "@material-ui/core";
-import { SettingsOutlined as SettingsIcon } from "@material-ui/icons";
 
 import circleSymbol from "../../assets/images/circle.svg";
 import timesSymbol from "../../assets/images/times.svg";
@@ -282,6 +284,24 @@ export default function Game() {
                 </Grid>
               )}
             </Box>
+          </Grid>
+        </Grid>
+
+        <Grid item xs={12}>
+          <hr className={classes.dividerLarge} />
+
+          <Grid container alignItems="center" direction="column" spacing={3}>
+            <Grid item>
+              <Link href="https://github.com/marciorasf" variant="h3">
+                @marciorasf
+              </Link>
+            </Grid>
+
+            <Grid item>
+              <Link href="https://github.com/marciorasf/tic-tac-toe">
+                <GithubIcon style={{ fontSize: "3.5rem" }} />
+              </Link>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
