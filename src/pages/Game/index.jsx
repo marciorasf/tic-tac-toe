@@ -67,7 +67,7 @@ export default function Game() {
   }
 
   function isBotTurn() {
-    return !isPlayer1Turn && mode === "single";
+    return !isPlayer1Turn && mode === "single" && !hasTied && !currentWinner;
   }
 
   function isEndGame() {
