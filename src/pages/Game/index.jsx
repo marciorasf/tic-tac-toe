@@ -46,11 +46,12 @@ export default function Game() {
   const [isPlayer1Turn, setIsPlayer1Turn] = useState(true);
   const [waitingBot, setWaitingBot] = useState(false);
   const [currentWinner, setCurrentWinner] = useState(null);
+  const [winnerPlayIndex, setWinnerPlayIndex] = useState(null);
   const [hasTied, setHasTied] = useState(false);
 
   const [winCounter, setWinCounter] = useState({ player1: 0, player2: 0 });
 
-  const classes = useStyles();
+  const classes = useStyles({ winnerPlayIndex })();
 
   function handleToggleOpenSettings() {
     setOpenSettings(!openSettings);
@@ -86,11 +87,15 @@ export default function Game() {
     currentSquares[squareIndex] = isPlayer1Turn ? player1Markup : player2Markup;
     setSquares(currentSquares);
 
-    const winner = calculateWinner(currentSquares);
+    const winnerInfo = calculateWinner(currentSquares);
 
-    if (winner) {
-      setCurrentWinner(winner);
-      incrementWinCounter(winner);
+    if (winnerInfo) {
+      const { winner, winnerPlayIndex: playIndex } = winnerInfo;
+      setWinnerPlayIndex(playIndex);
+      setTimeout(() => {
+        setCurrentWinner(winner);
+        incrementWinCounter(winner);
+      }, 500);
     }
 
     setHasTied(calculateTie(squares));
@@ -113,6 +118,7 @@ export default function Game() {
     setCurrentWinner(null);
     setHasTied(false);
     setSquares(initialSquares);
+    setWinnerPlayIndex(null);
   }
 
   useEffect(() => {

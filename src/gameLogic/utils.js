@@ -71,11 +71,11 @@ export function getWinnerPlayIfExists(winnerPlaysWithInfo, player) {
 }
 
 export function calculateWinner(squares) {
-  for (const play of winnerPlays) {
-    const [a, b, c] = play;
+  for (const play of winnerPlays.entries()) {
+    const [a, b, c] = play[1];
 
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return { winner: squares[a], winnerPlayIndex: play[0] };
     }
   }
 
