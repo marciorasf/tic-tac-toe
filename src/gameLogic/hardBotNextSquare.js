@@ -2,6 +2,9 @@ import impossibleBotNextSquare from "./impossibleBotNextSquare";
 import mediumBotNextSquare from "./mediumBotNextSquare";
 import { botMarkup } from "./utils";
 
+/*
+ * Choose impossible or medium bot based on a defined ratio
+ */
 export default function hardBotNextSquare(squares) {
   const impossibleBotRatio = 0.8;
 

@@ -5,6 +5,9 @@ import {
   botMarkup,
 } from "./utils";
 
+/*
+ * Always make the plays that decrease at most the adversary possibilities
+ */
 export default function impossibleBotNextSquare(squares) {
   const processedWinnerPlays = getWinnerPlaysWithInfo(squares);
 

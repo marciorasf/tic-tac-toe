@@ -6,6 +6,10 @@ import {
   botMarkup,
 } from "./utils";
 
+/*
+ * Choose a square of the play combination that needs less plays to finish
+ * If there is no way to win, choose a random free square
+ */
 export default function mediumBotNextSquare(squares) {
   const winnerPlaysWithInfo = getWinnerPlaysWithInfo(squares);
 
