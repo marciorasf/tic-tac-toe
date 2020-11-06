@@ -38,7 +38,7 @@
     "type": "image/png"
     },
     {
-    "src": "images/splashscreen-384x384.png",
+    "src": "images/splashscreen-1080x1080.png",
     "sizes": "384x384",
     "type": "image/png"
     },
@@ -46,5 +46,11 @@
     "src": "images/splashscreen-512x512.png",
     "sizes": "512x512",
     "type": "image/png"
-    }]
+    },
+    {
+    "src": "images/splashscreen-1080x1080.png",
+    "sizes": "1080x1080",
+    "type": "image/png"
+    }
+  ]
 }
