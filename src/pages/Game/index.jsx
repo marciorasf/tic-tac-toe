@@ -40,7 +40,7 @@ const initialSquares = Array(nSquares).fill(undefined);
 export default function Game() {
   const [mode, setMode] = useState("single");
   const [botDifficult, setBotDifficult] = useState("hard");
-  const [openSettings, setOpenSettings] = useState(true);
+  const [openSettings, setOpenSettings] = useState(false);
 
   const [squares, setSquares] = useState(initialSquares);
   const [isPlayer1Turn, setIsPlayer1Turn] = useState(true);
