@@ -6,6 +6,7 @@ export default makeStyles((theme) => {
   const cellBorderColor = "black";
 
   return {
+    // General classes
     dividerSmall: {
       width: "100%",
       margin: theme.spacing(0.5, 0),
@@ -21,6 +22,7 @@ export default makeStyles((theme) => {
       margin: theme.spacing(3, 0),
       border: 0,
     },
+
     container: {
       display: "flex",
       justifyContent: "center",
@@ -37,9 +39,10 @@ export default makeStyles((theme) => {
         height: 18,
       },
     },
-    underlineScore: {
+    activePlayer: {
       borderBottom: "2px solid red",
     },
+
     board: {
       position: "relative",
       display: "grid",

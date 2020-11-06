@@ -11,7 +11,6 @@ import {
   MenuItem,
   InputLabel,
   Typography,
-  Button,
   IconButton,
 } from "@material-ui/core";
 import { SettingsOutlined as SettingsIcon } from "@material-ui/icons";
@@ -37,17 +36,23 @@ const playerSymbols = {
 const initialSquares = Array(nSquares).fill(undefined);
 
 export default function Game() {
-  const [squares, setSquares] = useState(initialSquares);
-  const [isPlayer1Turn, setIsPlayer1Turn] = useState(true);
-  const [waitingBot, setWaitingBot] = useState(false);
-  const [winCounter, setWinCounter] = useState({ player1: 0, player2: 0 });
-  const [currentWinner, setCurrentWinner] = useState("player1");
-  const [hasTied, setHasTied] = useState(false);
   const [mode, setMode] = useState("single");
   const [botDifficult, setBotDifficult] = useState("hard");
   const [openSettings, setOpenSettings] = useState(false);
 
+  const [squares, setSquares] = useState(initialSquares);
+  const [isPlayer1Turn, setIsPlayer1Turn] = useState(true);
+  const [waitingBot, setWaitingBot] = useState(false);
+  const [currentWinner, setCurrentWinner] = useState("player1");
+  const [hasTied, setHasTied] = useState(false);
+
+  const [winCounter, setWinCounter] = useState({ player1: 0, player2: 0 });
+
   const classes = useStyles();
+
+  function handleToggleOpenSettings() {
+    setOpenSettings(!openSettings);
+  }
 
   function handleModeChange(event) {
     const { value } = event.target;
@@ -59,10 +64,12 @@ export default function Game() {
     setBotDifficult(value);
   }
 
-  function restartGame() {
-    setCurrentWinner(null);
-    setHasTied(false);
-    setSquares(initialSquares);
+  function isBotTurn() {
+    return !isPlayer1Turn && mode === "single";
+  }
+
+  function isEndGame() {
+    return currentWinner || hasTied;
   }
 
   function incrementWinCounter(winner) {
@@ -70,10 +77,6 @@ export default function Game() {
       ...winCounter,
       [winner]: winCounter[winner] + 1,
     });
-  }
-
-  function isBotTurn() {
-    return !isPlayer1Turn && mode === "single";
   }
 
   function handleClickSquare(squareIndex) {
@@ -93,10 +96,6 @@ export default function Game() {
     setIsPlayer1Turn(!isPlayer1Turn);
   }
 
-  function handleToggleOpenSettings() {
-    setOpenSettings(!openSettings);
-  }
-
   function triggerBotPlay() {
     setWaitingBot(true);
 
@@ -108,8 +107,10 @@ export default function Game() {
     }, 250);
   }
 
-  function isEndGame() {
-    return currentWinner || hasTied;
+  function restartGame() {
+    setCurrentWinner(null);
+    setHasTied(false);
+    setSquares(initialSquares);
   }
 
   useEffect(() => {
@@ -168,7 +169,7 @@ export default function Game() {
             <Grid item xs={12}>
               <Grid container spacing={6}>
                 <Grid item xs={6}>
-                  <FormControl fullWidth variant="standard" size="small">
+                  <FormControl fullWidth size="small">
                     <InputLabel id="mode">Mode</InputLabel>
                     <Select
                       labelId="mode"
@@ -186,7 +187,6 @@ export default function Game() {
                   <FormControl
                     fullWidth
                     disabled={mode !== "single"}
-                    variant="standard"
                     size="small"
                   >
                     <InputLabel id="botDifficult">Bot difficult</InputLabel>
@@ -221,7 +221,7 @@ export default function Game() {
                   <Typography
                     className={clsx(
                       classes.playerScore,
-                      isPlayerTurn && classes.underlineScore
+                      isPlayerTurn && classes.activePlayer
                     )}
                   >
                     <img
