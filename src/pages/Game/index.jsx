@@ -12,7 +12,9 @@ import {
   InputLabel,
   Typography,
   Button,
+  IconButton,
 } from "@material-ui/core";
+import { SettingsOutlined as SettingsIcon } from "@material-ui/icons";
 
 import circleSymbol from "../../assets/images/circle.svg";
 import timesSymbol from "../../assets/images/times.svg";
@@ -43,6 +45,7 @@ export default function Game() {
   const [hasTied, setHasTied] = useState(false);
   const [mode, setMode] = useState("single");
   const [botDifficult, setBotDifficult] = useState("hard");
+  const [openSettings, setOpenSettings] = useState(false);
 
   const classes = useStyles();
 
@@ -90,6 +93,10 @@ export default function Game() {
     setIsPlayer1Turn(!isPlayer1Turn);
   }
 
+  function handleToggleOpenSettings() {
+    setOpenSettings(!openSettings);
+  }
+
   function triggerBotPlay() {
     setWaitingBot(true);
 
@@ -132,56 +139,79 @@ export default function Game() {
       <Grid container justify="center">
         <hr className={classes.dividerMedium} />
 
-        <Typography variant="h1" component="h1">
-          tic-tac-toe
-        </Typography>
+        <Grid item xs={12}>
+          <Grid container justify="space-between">
+            <Grid item xs={2}></Grid>
 
-        <hr className={classes.dividerLarge} />
-
-        {/* <Grid item xs={12}>
-          <Grid container spacing={8}>
-            <Grid item xs={6}>
-              <FormControl fullWidth variant="outlined">
-                <InputLabel id="mode">Mode</InputLabel>
-                <Select
-                  labelId="mode"
-                  label="Mode"
-                  onChange={handleModeChange}
-                  value={mode}
-                >
-                  <MenuItem value="single">singleplayer</MenuItem>
-                  <MenuItem value="multi">multiplayer</MenuItem>
-                </Select>
-              </FormControl>
+            <Grid item xs={8}>
+              <Grid container justify="center">
+                <Typography variant="h1" component="h1">
+                  tic-tac-toe
+                </Typography>
+              </Grid>
             </Grid>
 
-            <Grid item xs={6}>
-              <FormControl
-                fullWidth
-                disabled={mode !== "single"}
-                variant="outlined"
-              >
-                <InputLabel id="botDifficult">Bot difficult</InputLabel>
-                <Select
-                  labelId="botDifficult"
-                  label="Bot difficult"
-                  onChange={handleBotDifficultChange}
-                  value={botDifficult}
-                >
-                  <MenuItem value="easy">Easy</MenuItem>
-                  <MenuItem value="medium">Medium</MenuItem>
-                  <MenuItem value="hard">Hard</MenuItem>
-                  <MenuItem value="impossible">Impossible</MenuItem>
-                </Select>
-              </FormControl>
+            <Grid item xs={2}>
+              <Grid container justify="flex-end">
+                <IconButton onClick={handleToggleOpenSettings}>
+                  <SettingsIcon style={{ fontSize: "2rem" }} />
+                </IconButton>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
 
-        <hr className={classes.dividerLarge} /> */}
+        <hr className={classes.dividerLarge} />
+
+        {openSettings && (
+          <>
+            <Grid item xs={12}>
+              <Grid container spacing={6}>
+                <Grid item xs={6}>
+                  <FormControl fullWidth variant="standard" size="small">
+                    <InputLabel id="mode">Mode</InputLabel>
+                    <Select
+                      labelId="mode"
+                      label="Mode"
+                      onChange={handleModeChange}
+                      value={mode}
+                    >
+                      <MenuItem value="single">singleplayer</MenuItem>
+                      <MenuItem value="multi">multiplayer</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <FormControl
+                    fullWidth
+                    disabled={mode !== "single"}
+                    variant="standard"
+                    size="small"
+                  >
+                    <InputLabel id="botDifficult">Bot difficult</InputLabel>
+                    <Select
+                      labelId="botDifficult"
+                      label="Bot difficult"
+                      onChange={handleBotDifficultChange}
+                      value={botDifficult}
+                    >
+                      <MenuItem value="easy">Easy</MenuItem>
+                      <MenuItem value="medium">Medium</MenuItem>
+                      <MenuItem value="hard">Hard</MenuItem>
+                      <MenuItem value="impossible">Impossible</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <hr className={classes.dividerLarge} />
+          </>
+        )}
 
         <Grid item xs={12}>
-          <Grid container spacing={8}>
+          <Grid container spacing={6}>
             {Object.keys(playerSymbols).map((player) => {
               const isPlayerTurn =
                 player === "player1" ? isPlayer1Turn : !isPlayer1Turn;
@@ -207,7 +237,7 @@ export default function Game() {
           </Grid>
         </Grid>
 
-        <hr className={classes.dividerLarge} />
+        <hr className={classes.dividerMedium} />
 
         <Grid item xs={12}>
           <Grid
