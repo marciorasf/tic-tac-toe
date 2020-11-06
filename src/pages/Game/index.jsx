@@ -92,6 +92,8 @@ export default function Game() {
     if (winnerInfo) {
       const { winner, winnerPlayIndex: playIndex } = winnerInfo;
       setWinnerPlayIndex(playIndex);
+      setWaitingBot(true);
+
       setTimeout(() => {
         setCurrentWinner(winner);
         incrementWinCounter(winner);
@@ -119,6 +121,7 @@ export default function Game() {
     setHasTied(false);
     setSquares(initialSquares);
     setWinnerPlayIndex(null);
+    setWaitingBot(false);
   }
 
   useEffect(() => {
