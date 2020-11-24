@@ -37,6 +37,15 @@ const playerSymbols = {
 
 const initialSquares = Array(nSquares).fill(undefined);
 
+const gameStates = {
+  waitingPlay: "WAITING_PLAY",
+  endTurn: "END_TURN",
+  showingWinnerPlay: "SHOWING_WINNER_PLAY",
+  winner: "WINNER",
+  tied: "TIED",
+  waitingBot: "WAITING_BOT",
+};
+
 export default function Game() {
   const [mode, setMode] = useState("single");
   const [botDifficult, setBotDifficult] = useState("hard");
@@ -44,10 +53,9 @@ export default function Game() {
 
   const [squares, setSquares] = useState(initialSquares);
   const [isPlayer1Turn, setIsPlayer1Turn] = useState(true);
-  const [waitingBot, setWaitingBot] = useState(false);
   const [currentWinner, setCurrentWinner] = useState(null);
   const [winnerPlayIndex, setWinnerPlayIndex] = useState(null);
-  const [hasTied, setHasTied] = useState(false);
+  const [gameState, setGameState] = useState(gameStates.waitingPlay);
 
   const [winCounter, setWinCounter] = useState({ player1: 0, player2: 0 });
 
@@ -68,11 +76,11 @@ export default function Game() {
   }
 
   function isBotTurn() {
-    return !isPlayer1Turn && mode === "single" && !hasTied && !currentWinner;
-  }
-
-  function isEndGame() {
-    return currentWinner || hasTied;
+    return (
+      !isPlayer1Turn &&
+      mode === "single" &&
+      gameState === gameStates.waitingPlay
+    );
   }
 
   function incrementWinCounter(winner) {
@@ -86,49 +94,68 @@ export default function Game() {
     const currentSquares = squares.slice();
     currentSquares[squareIndex] = isPlayer1Turn ? player1Markup : player2Markup;
     setSquares(currentSquares);
-
-    const winnerInfo = calculateWinner(currentSquares);
-
-    if (winnerInfo) {
-      const { winner, winnerPlayIndex: playIndex } = winnerInfo;
-      setWinnerPlayIndex(playIndex);
-      setWaitingBot(true);
-
-      setTimeout(() => {
-        setCurrentWinner(winner);
-        incrementWinCounter(winner);
-      }, 500);
-    }
-
-    setHasTied(calculateTie(squares));
-
-    setIsPlayer1Turn(!isPlayer1Turn);
+    setGameState(gameStates.endTurn);
   }
 
   function triggerBotPlay() {
-    setWaitingBot(true);
+    setGameState(gameStates.waitingBot);
 
     const nextSquare = getBotNextSquare(botDifficult, squares);
 
     setTimeout(() => {
       handleClickSquare(nextSquare);
-      setWaitingBot(false);
     }, 250);
+  }
+
+  function isEndGame() {
+    return gameState === gameStates.winner || gameState === gameStates.tied;
   }
 
   function restartGame() {
     setCurrentWinner(null);
-    setHasTied(false);
     setSquares(initialSquares);
     setWinnerPlayIndex(null);
-    setWaitingBot(false);
+    setGameState(gameStates.waitingPlay);
+  }
+
+  function verifyIfGameEnded() {
+    const winnerInfo = calculateWinner(squares);
+
+    if (winnerInfo) {
+      const { winner, winnerPlayIndex: playIndex } = winnerInfo;
+      setWinnerPlayIndex(playIndex);
+      setCurrentWinner(winner);
+      incrementWinCounter(winner);
+
+      setTimeout(() => {
+        setGameState(gameStates.winner);
+      }, 500);
+
+      return true;
+    }
+
+    const hasTied = calculateTie(squares);
+    if (hasTied) {
+      setGameState(gameStates.tied);
+      return true;
+    }
+
+    return false;
   }
 
   useEffect(() => {
-    if (isBotTurn() && !waitingBot) {
+    if (gameState === gameStates.endTurn) {
+      setIsPlayer1Turn(!isPlayer1Turn);
+
+      if (!verifyIfGameEnded()) {
+        setGameState(gameStates.waitingPlay);
+      }
+    }
+
+    if (isBotTurn()) {
       triggerBotPlay();
     }
-  }, [squares, mode]);
+  }, [squares, gameState]);
 
   const Squares = () =>
     squares.map((square, index) => (
@@ -136,7 +163,7 @@ export default function Game() {
         key={index}
         className={classes.boardCell}
         onClick={() => handleClickSquare(index)}
-        disabled={square || waitingBot}
+        disabled={square || gameState === gameStates.waitingBot}
       >
         {square && (
           <img
@@ -278,7 +305,7 @@ export default function Game() {
                     variant="h2"
                     className={classes.endGameText}
                   >
-                    {currentWinner ? (
+                    {gameState === gameStates.winner ? (
                       <>
                         <img
                           src={playerSymbols[currentWinner]}
