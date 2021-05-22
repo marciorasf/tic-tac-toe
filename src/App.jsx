@@ -1,6 +1,6 @@
 import React from "react";
 
-import { CssBaseline } from "@material-ui/core";
+import { Box, CssBaseline } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 
 import { Game } from "./pages";
@@ -11,7 +11,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Game />
+      <Box minHeight="100vh" display="flex" alignItems="center">
+        <Game />
+      </Box>
     </ThemeProvider>
   );
 }
