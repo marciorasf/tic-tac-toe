@@ -155,6 +155,7 @@ export default function Game() {
     if (isBotTurn()) {
       triggerBotPlay();
     }
+    // eslint-disable-next-line
   }, [squares, gameState]);
 
   const Squares = () =>
